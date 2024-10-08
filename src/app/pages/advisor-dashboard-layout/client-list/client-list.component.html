@@ -1,0 +1,1491 @@
+<div class="flex justify-content-between flex-wrap mb-2">
+  <div class="flex align-items-center justify-content-center">
+    <div class="page-title float-left">
+      <div class="breadcrum float-left w-100">
+        <a class="text-muted"><i class="pi pi-home float-left font-16"></i></a>
+        <span class="mx-2 float-left text-muted font-18">/</span>
+        <a class="text-muted font-14 text-medium">Clients</a>
+      </div>
+      <div class="page-heading float-left w-100">
+        <span class="font-18 font-semibold text-primary">Clients</span>
+      </div>
+    </div>
+  </div>
+  <div
+    class="top-action-wrapper flex align-items-center justify-content-center"
+  >
+    <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+      <p-button
+        icon="pi pi-plus"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Create New Account"
+        [routerLink]="['/advisor-dashboard/create-new-account']"
+      />
+      <p-button
+        icon="pi pi-user-plus"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Create New Client"
+        (click)="showAddClientModal()"
+        *ngIf="activeIndex == 0"
+      />
+      <p-button
+        icon="pi pi-cog"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Configure CRM Integration"
+        *ngIf="activeIndex == 1"
+      />
+      <p-button
+        icon="pi pi-sync"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Manual Synch with CRM"
+        *ngIf="activeIndex == 1"
+      />
+      <p-divider layout="vertical" />
+      <p-button
+        icon="pi pi-file-excel"
+        tooltipPosition="top"
+        pTooltip="Export To Excel"
+        (click)="liquidityDashboardTable.exportCSV()"
+      />
+      <p-button
+        icon="pi pi-table"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Column Selection"
+        (click)="coloumnSelection.toggle($event)"
+      />
+      <p-overlayPanel #coloumnSelection>
+        <div *ngFor="let tableColoumn of tableColumns" class="field-checkbox">
+          <p-checkbox
+            [(ngModel)]="selectedTableColumns"
+            [label]="tableColoumn?.header"
+            name="header"
+            [value]="tableColoumn"
+          ></p-checkbox>
+        </div>
+      </p-overlayPanel>
+
+      <p-button
+        class="search-icon"
+        [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+        icon="pi pi pi-search"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Search"
+        (click)="toggleSearch()"
+        *ngIf="!searchExpanded"
+      />
+      <p-button
+        class="search-icon"
+        [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+        icon="pi pi pi-times"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Close Search"
+        (click)="
+          toggleSearch(); liquidityDashboardTable.filterGlobal('', 'contains')
+        "
+        *ngIf="searchExpanded"
+      />
+      <p-iconField
+        class="search-wrapper"
+        iconPosition="left"
+        *ngIf="searchExpanded"
+      >
+        <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Search"
+          #searchTable
+          (input)="
+            liquidityDashboardTable.filterGlobal(searchTable.value, 'contains')
+          "
+        />
+      </p-iconField>
+    </div>
+  </div>
+</div>
+
+<p-tabView [(activeIndex)]="activeIndex">
+  <p-tabPanel header="My Clients">
+    <!-- My Clients Table View -->
+    <div class="custom-table mb-3" *ngIf="!isUploadDocuments">
+      <p-table
+        [value]="clientList"
+        [columns]="selectedTableColumns"
+        #liquidityDashboardTable
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 50, 100]"
+        styleClass="scrollable-custom-table"
+        [scrollable]="true"
+        scrollHeight="calc(100vh - 270px)"
+        [globalFilterFields]="[
+          'name',
+          'address',
+          'primaryemail',
+          'primaryphone',
+          'dob',
+          'ssn',
+          'assetsbalance'
+        ]"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <ng-container *ngFor="let column of columns">
+              <th
+                [pSortableColumn]="column?.field"
+                [pTooltip]="column?.tooltip"
+                tooltipPosition="bottom"
+              >
+                <p-columnFilter
+                  type="text"
+                  [field]="column?.field"
+                  display="menu"
+                  [showAddButton]="false"
+                  [showOperator]="false"
+                />
+                {{ column.header }}
+                <p-sortIcon [field]="column?.field" />
+              </th>
+            </ng-container>
+            <th alignFrozen="right" pFrozenColumn class="text-center">
+              Actions
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-liquidity let-columns="columns">
+          <tr>
+            <!-- <td pFrozenColumn style="min-width: 210px;">{{ liquidity.name }}</td> -->
+            <ng-container *ngFor="let column of columns">
+              <td *ngIf="column.field === 'name'" style="min-width: 210px">
+                {{ liquidity.name }}
+              </td>
+              <td *ngIf="column.field === 'address'" style="min-width: 340px">
+                <div class="flex flex-column">
+                  <span class="text-color-secondary">{{
+                    liquidity.addresstype
+                  }}</span>
+                  <span class="flex flex-grow-1 gap-2">
+                    {{ liquidity.address1 }}
+                    <div
+                      class="custom-table-badge"
+                      *ngIf="liquidity.countaddress >= 2"
+                    >
+                      <p-button
+                        (onClick)="op.toggle($event)"
+                        label="+{{ liquidity.countaddress }}"
+                        severity="secondary"
+                        size="small"
+                        [outlined]="true"
+                      />
+                      <p-overlayPanel #op>
+                        <div class="card">
+                          <p-table
+                            [value]="AddressList"
+                            [columns]="selectedAddressListColumns"
+                            styleClass="custom-popover-table"
+                          >
+                            <ng-template pTemplate="header">
+                              <tr>
+                                <th>Address Type</th>
+                                <th>Address</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body">
+                              <tr>
+                                <td>{{ liquidity.addresstype }}</td>
+                                <td>{{ liquidity.address1 }}</td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </div>
+                        <!-- <span class="font-14">{{liquidity.address1 }}</span>
+                                                <span *ngIf="liquidity.countaddress > 1">
+                                                    <br>
+                                                    <span class="font-14">{{liquidity.address2 }}</span>
+                                                </span>
+                                                <span *ngIf="liquidity.countaddress > 2">
+                                                    <br>
+                                                    <span class="font-14">{{liquidity.address3 }}</span>
+                                                </span> -->
+                      </p-overlayPanel>
+                    </div>
+                  </span>
+                </div>
+              </td>
+              <td *ngIf="column.field === 'primaryemail'">
+                {{ liquidity.primaryemail }}
+              </td>
+              <td
+                *ngIf="column.field === 'primaryphone'"
+                style="min-width: 210px"
+              >
+                <div class="flex flex-column">
+                  <span class="text-color-secondary">{{
+                    liquidity.phonetype
+                  }}</span>
+                  <div class="flex flex-grow-1 gap-2">
+                    {{ liquidity.primaryphone }}
+                    <div
+                      class="custom-table-badge"
+                      *ngIf="liquidity.countmobilenumber >= 2"
+                    >
+                      <p-button
+                        (onClick)="mobileTable.toggle($event)"
+                        label="+{{ liquidity.countmobilenumber }}"
+                        severity="secondary"
+                        size="small"
+                        [outlined]="true"
+                      />
+                      <p-overlayPanel #mobileTable>
+                        <div class="card">
+                          <p-table
+                            [value]="AddressList"
+                            [columns]="selectedAddressListColumns"
+                            styleClass="custom-popover-table"
+                          >
+                            <ng-template pTemplate="header">
+                              <tr>
+                                <th>Phone Number Type</th>
+                                <th>Phone Number</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body">
+                              <tr>
+                                <td>Mobile</td>
+                                <td>(605) 583-9234</td>
+                              </tr>
+                            </ng-template>
+                          </p-table>
+                        </div>
+                        <!-- <span class="font-14">{{liquidity.mobilenumber1 }}</span>
+                                                <span *ngIf="liquidity.countmobilenumber > 1">
+                                                    <br>
+                                                    <span class="font-14">{{liquidity.mobilenumber2 }}</span>
+                                                </span>
+                                                <span *ngIf="liquidity.countmobilenumber > 2">
+                                                    <br>
+                                                    <span class="font-14">{{liquidity.mobilenumber3 }}</span>
+                                                </span> -->
+                      </p-overlayPanel>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td
+                *ngIf="column.field === 'assetsbalance'"
+                class="text-right"
+                style="min-width: 180px"
+              >
+                <span *ngIf="liquidity.isloading == true" class="text-right">
+                  <i class="pi pi-spin pi-spinner"></i>
+                  <span
+                    class="font-12 text-color-secondary"
+                    style="display: block"
+                    >Fetching Data..</span
+                  >
+                </span>
+                <span *ngIf="liquidity.isloading == false">
+                  {{ liquidity.assetsbalance }}
+                  <span
+                    class="font-12 text-color-secondary"
+                    style="display: block"
+                    >{{ liquidity.accbalanceasof }}</span
+                  >
+                </span>
+              </td>
+              <td *ngIf="column.field === 'dob'" style="min-width: 160px">
+                {{ liquidity.dob }}
+              </td>
+              <td *ngIf="column.field === 'ssn'" style="min-width: 125px">
+                {{ liquidity.ssn }}
+              </td>
+            </ng-container>
+            <td
+              alignFrozen="right"
+              pFrozenColumn
+              style="min-width: 110px; border-left: 1px solid #e8ebf3"
+            >
+              <div class="card flex justify-content-center">
+                <p-button
+                  severity="primary"
+                  tooltipPosition="top"
+                  class="mr-1"
+                  pTooltip="Edit Client"
+                  icon="pi pi-pencil"
+                  size="small"
+                  [outlined]="true"
+                  (click)="showClientEditModal()"
+                />
+                <p-button
+                  severity="primary"
+                  tooltipPosition="top"
+                  class="mr-1"
+                  pTooltip="Document Repositories"
+                  icon="pi pi-file"
+                  size="small"
+                  [outlined]="true"
+                  (click)="isUploadDocuments = true"
+                />
+                <p-button
+                  icon="pi pi-clipboard"
+                  class="mr-1"
+                  tooltipPosition="top"
+                  pTooltip="Notes"
+                  [outlined]="true"
+                  (click)="this.showCommentsModal = true"
+                />
+                <p-button
+                  severity="primary"
+                  tooltipPosition="top"
+                  pTooltip="Refresh Balance"
+                  icon="pi pi-sync"
+                  size="small"
+                  [outlined]="true"
+                />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+    <!-- Uplaod Document View -->
+    <div class="custom-table mb-3" *ngIf="isUploadDocuments">
+      <div
+        class="top-action-wrapper flex align-items-center justify-content-between mb-2"
+      >
+        <div class="float-left">
+          <p-badge [value]="UploadDocumentCount" class="mr-1" />
+          Mr. Charles Smith
+        </div>
+        <p-button
+          class="float-right"
+          icon="pi pi-angle-left"
+          class="mr-1"
+          tooltipPosition="top"
+          pTooltip="Back"
+          (click)="isUploadDocuments = false"
+        />
+        <!-- <div class="page-actions float-left flex"> -->
+        <!-- <p-dropdown 
+                    class="mr-1"
+                    width="220px"
+                    [options]="clients" 
+                    [(ngModel)]="selectedClients" 
+                    optionLabel="name" 
+                    value="Mr. Charles Smith"
+                    placeholder="Select a Client" />
+                    <p-button class="float-left" icon="pi pi-angle-left" class="mr-1" tooltipPosition="top" pTooltip="Back" 
+                    (click)="isUploadDocuments = false"  /> -->
+        <!-- </div> -->
+      </div>
+
+      <div class="flex flex-column">
+        <div class="card flex">
+          <div class="flex-1 flex-column">
+            <!-- <p class="font-medium mb-1">Have you signed Advisor Agreements for Mr. Charles Smith?</p>
+                        <div class="flex flex-wrap gap-3 mb-3">
+                            <div class="flex align-items-center">
+                                <p-radioButton 
+                                    name="AgreementStatus" 
+                                    value="Yes" 
+                                    [(ngModel)]="agremeentRadio" 
+                                    inputId="agremeentRadio1"
+                                    (click)="agreementYes()" />
+                                <label for="agremeentRadio1" class="ml-2">
+                                    Yes
+                                </label>
+                            </div>
+                            
+                            <div class="flex align-items-center">
+                                <p-radioButton 
+                                    name="AgreementStatus" 
+                                    value="No" 
+                                    [(ngModel)]="agremeentRadio" 
+                                    inputId="agremeentRadio2"
+                                    (click)="agreementNo()" />
+                                <label for="agremeentRadio2" class="ml-2">
+                                    No
+                                </label>
+                            </div>
+                        </div> -->
+            <!-- Yes Start here -->
+            <div class="flex flex-grow flex-column">
+              <p class="mb-3">Please upload the document</p>
+              <div class="flex gap-3">
+                <div
+                  class="flex-1 align-items-center border-round-sm border-300 border-solid border-1 p-2 mb-3"
+                  style="max-width: 32.5%"
+                >
+                  <div
+                    class="flex flex-grow flex-column"
+                    style="position: relative"
+                  >
+                    <span
+                      class="category-Name w-full font-12 text-color-secondary"
+                      ><i
+                        class="pi pi-info-circle font-14 text-color-secondary pull-left mr-1"
+                      ></i
+                      >Category Name</span
+                    >
+                    <span class="category-Name w-full">Drivers License</span>
+                    <div class="flex gap-2 mt-3">
+                      <!-- <p-button icon="pi pi-eye" class="btn-icon-sm" [outlined]="true" tooltipPosition="top" pTooltip="View Template"/> -->
+                      <!-- <p-button icon="pi pi-upload" class="btn-icon-sm" [outlined]="true" tooltipPosition="top" pTooltip="Upload Document"/> -->
+                      <div class="upload-btn-wrapper">
+                        <button class="btn">
+                          <i class="pi pi-upload"></i>
+                        </button>
+                        <input
+                          type="file"
+                          name="myfile"
+                          class="cursor-pointer"
+                          tooltipPosition="top"
+                          pTooltip="Upload Document"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex-1 align-items-center border-round-sm border-300 border-solid border-1 p-2 mb-3"
+                  style="max-width: 32.5%"
+                >
+                  <div
+                    class="flex flex-grow flex-column"
+                    style="position: relative"
+                  >
+                    <i class="check-icon pi pi-check-circle text-green-500"></i>
+                    <span
+                      class="category-Name w-full font-12 text-color-secondary"
+                      ><i
+                        class="pi pi-info-circle font-14 text-color-secondary pull-left mr-1"
+                      ></i
+                      >Category Name</span
+                    >
+                    <span class="category-Name w-full">Utility Bill</span>
+                    <div class="flex gap-1 mt-3">
+                      <!-- <p-button icon="pi pi-eye" class="btn-icon-sm" [outlined]="true" tooltipPosition="top" pTooltip="View Template"/>
+                                            <span class="mx-2 border-none border-right-1 border-solid border-500"></span> -->
+                      <span
+                        class="action-link w-full font-14 underline mt-1 cursor-pointer"
+                        >Sharingdoument.pdf
+                        <span
+                          class="pi pi-trash font-14 text-orange-500 ml-2"
+                        ></span
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex-1 align-items-center border-round-sm border-300 border-solid border-1 p-2 mb-3"
+                  style="max-width: 32.5%"
+                >
+                  <div
+                    class="flex flex-grow flex-column"
+                    style="position: relative"
+                  >
+                    <span
+                      class="category-Name w-full font-12 text-color-secondary"
+                      ><i
+                        class="pi pi-info-circle font-14 text-color-secondary pull-left mr-1"
+                      ></i
+                      >Category Name</span
+                    >
+                    <span class="category-Name w-full">Bank Statement</span>
+                    <div class="flex gap-2 mt-3">
+                      <div class="upload-btn-wrapper">
+                        <button class="btn">
+                          <i class="pi pi-upload"></i>
+                        </button>
+                        <input
+                          type="file"
+                          name="myfile"
+                          class="cursor-pointer"
+                          tooltipPosition="top"
+                          pTooltip="Upload Document"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <div
+                  class="flex-1 align-items-center border-round-sm border-300 border-solid border-1 p-2"
+                  style="max-width: 32.5%"
+                >
+                  <div
+                    class="flex flex-grow flex-column"
+                    style="position: relative"
+                  >
+                    <i class="check-icon pi pi-check-circle text-green-500"></i>
+                    <span
+                      class="category-Name w-full font-12 text-color-secondary"
+                      ><i
+                        class="pi pi-info-circle font-14 text-color-secondary pull-left mr-1"
+                      ></i
+                      >Category Name</span
+                    >
+                    <span class="category-Name w-full"
+                      >Name Change Affidavit</span
+                    >
+                    <div class="flex gap-1 mt-3">
+                      <!-- <p-button icon="pi pi-eye" class="btn-icon-sm" [outlined]="true" tooltipPosition="top" pTooltip="View Template"/> -->
+                      <!-- <span class="mx-2 border-none border-right-1 border-solid border-500"></span> -->
+                      <span
+                        class="action-link w-full font-14 underline mt-1 cursor-pointer"
+                        >Sharingdoument.pdf
+                        <span
+                          class="pi pi-trash font-14 text-orange-500 ml-2"
+                        ></span
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex-1 align-items-center border-round-sm border-300 border-solid border-1 p-2"
+                  style="max-width: 32.5%"
+                >
+                  <div
+                    class="flex flex-grow flex-column"
+                    style="position: relative"
+                  >
+                    <span
+                      class="category-Name w-full font-12 text-color-secondary"
+                      ><i
+                        class="pi pi-info-circle font-14 text-color-secondary pull-left mr-1"
+                      ></i
+                      >Category Name</span
+                    >
+                    <span class="category-Name w-full"
+                      >Unspecified Verification</span
+                    >
+                    <div class="flex gap-2 mt-3">
+                      <div class="upload-btn-wrapper">
+                        <button class="btn">
+                          <i class="pi pi-upload"></i>
+                        </button>
+                        <input
+                          type="file"
+                          name="myfile"
+                          class="cursor-pointer"
+                          tooltipPosition="top"
+                          pTooltip="Upload Document"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex-1 align-items-center border-round-sm border-300 border-solid border-1 p-2"
+                  style="max-width: 32.5%"
+                >
+                  <div
+                    class="flex flex-grow flex-column"
+                    style="position: relative"
+                  >
+                    <span
+                      class="category-Name w-full font-12 text-color-secondary"
+                      ><i
+                        class="pi pi-info-circle font-14 text-color-secondary pull-left mr-1"
+                      ></i
+                      >Category Name</span
+                    >
+                    <span class="category-Name w-full"
+                      >Summary Dispute Documentation</span
+                    >
+                    <div class="flex gap-2 mt-3">
+                      <div class="upload-btn-wrapper">
+                        <button class="btn">
+                          <i class="pi pi-upload"></i>
+                        </button>
+                        <input
+                          type="file"
+                          name="myfile"
+                          class="cursor-pointer"
+                          tooltipPosition="top"
+                          pTooltip="Upload Document"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="flex justify-content-center mt-3">
+                                <div class="flex justify-content-center gap-3 mt-3">
+                                    <p-button label="Save" severity="secondary" [outlined]="true" />
+                                    <p-button label="Upload & Next"/>
+                                </div>
+                            </div> -->
+            </div>
+            <!-- Yes End here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="CRM Clients">
+    <div class="custom-table mb-3">
+      <p-table
+        [value]="clientList"
+        [columns]="selectedTableColumns"
+        #liquidityDashboardTable
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 50, 100]"
+        styleClass="scrollable-custom-table"
+        [scrollable]="true"
+        scrollHeight="calc(100vh - 270px)"
+        [globalFilterFields]="[
+          'name',
+          'address',
+          'primaryemail',
+          'primaryphone'
+        ]"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th pSortableColumn="name">
+              <p-columnFilter
+                type="text"
+                field="name"
+                display="menu"
+                [showAddButton]="false"
+                [showOperator]="false"
+              />
+              Name
+              <p-sortIcon field="name" />
+            </th>
+            <th pSortableColumn="address">
+              <p-columnFilter
+                type="text"
+                field="address"
+                display="menu"
+                [showAddButton]="false"
+                [showOperator]="false"
+              />
+              Address
+              <p-sortIcon field="address" />
+            </th>
+            <th pSortableColumn="primaryemail">
+              <p-columnFilter
+                type="text"
+                field="primaryemail"
+                display="menu"
+                [showAddButton]="false"
+                [showOperator]="false"
+              />
+              Email
+              <p-sortIcon field="primaryemail" />
+            </th>
+            <th pSortableColumn="primaryphone">
+              <p-columnFilter
+                type="text"
+                field="primaryphone"
+                display="menu"
+                [showAddButton]="false"
+                [showOperator]="false"
+              />
+              Phone
+              <p-sortIcon field="primaryphone" />
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-liquidity let-columns="columns">
+          <tr>
+            <ng-container *ngFor="let column of columns">
+              <td *ngIf="column.field === 'name'">{{ liquidity.name }}</td>
+              <td *ngIf="column.field === 'address'">
+                <div class="flex flex-grow-1 gap-2">
+                  {{ liquidity.address1 }}
+                  <div
+                    class="custom-table-badge"
+                    *ngIf="liquidity.countaddress >= 2"
+                  >
+                    <p-button
+                      (onClick)="op.toggle($event)"
+                      label="+{{ liquidity.countaddress }}"
+                      severity="secondary"
+                      size="small"
+                      [outlined]="true"
+                    />
+                    <p-overlayPanel #op>
+                      <div class="card">
+                        <p-table
+                          [value]="AddressList"
+                          [columns]="selectedAddressListColumns"
+                          styleClass="custom-popover-table"
+                        >
+                          <ng-template pTemplate="header">
+                            <tr>
+                              <th>Address Type</th>
+                              <th>Address</th>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body">
+                            <tr>
+                              <td>{{ liquidity.addresstype }}</td>
+                              <td>{{ liquidity.address1 }}</td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </div>
+                      <!-- <span class="font-14">{{liquidity.address1 }}</span>
+                                            <span *ngIf="liquidity.countaddress > 1">
+                                                <br>
+                                                <span class="font-14">{{liquidity.address2 }}</span>
+                                            </span>
+                                            <span *ngIf="liquidity.countaddress > 2">
+                                                <br>
+                                                <span class="font-14">{{liquidity.address3 }}</span>
+                                            </span> -->
+                    </p-overlayPanel>
+                  </div>
+                </div>
+              </td>
+              <td *ngIf="column.field === 'primaryemail'">
+                {{ liquidity.primaryemail }}
+              </td>
+              <td
+                *ngIf="column.field === 'primaryphone'"
+                style="min-width: 210px"
+              >
+                <div class="flex flex-grow-1 gap-2">
+                  {{ liquidity.primaryphone }}
+
+                  <div
+                    class="custom-table-badge"
+                    *ngIf="liquidity.countmobilenumber >= 2"
+                  >
+                    <p-button
+                      (onClick)="mobileTable.toggle($event)"
+                      label="+{{ liquidity.countmobilenumber }}"
+                      severity="secondary"
+                      size="small"
+                      [outlined]="true"
+                    />
+                    <p-overlayPanel #mobileTable>
+                      <div class="card">
+                        <p-table
+                          [value]="AddressList"
+                          [columns]="selectedAddressListColumns"
+                          styleClass="custom-popover-table"
+                        >
+                          <ng-template pTemplate="header">
+                            <tr>
+                              <th>Phone Number Type</th>
+                              <th>Phone Number</th>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body">
+                            <tr>
+                              <td>Mobile</td>
+                              <td>(605) 583-9234</td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                      </div>
+                      <!-- <span class="font-14">{{liquidity.mobilenumber1 }}</span>
+                                            <span *ngIf="liquidity.countmobilenumber > 1">
+                                                <br>
+                                                <span class="font-14">{{liquidity.mobilenumber2 }}</span>
+                                            </span>
+                                            <span *ngIf="liquidity.countmobilenumber > 2">
+                                                <br>
+                                                <span class="font-14">{{liquidity.mobilenumber3 }}</span>
+                                            </span> -->
+                    </p-overlayPanel>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-tabPanel>
+</p-tabView>
+
+<br />
+
+<!-- Add Client Modal -->
+<p-dialog
+  header="Add New Client"
+  [(visible)]="showAddClient"
+  [modal]="true"
+  [styleClass]="'custom-label-form'"
+  [breakpoints]="{ '699px': '100%' }"
+  [style]="{ width: '699px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="flex mb-3">
+    <div class="flex-1 flex align-items-center justify-content-center gap-3">
+      <div class="flex-grow-1 flex flex-column" style="width: 0">
+        <label for="username" class="form-label">Title</label>
+        <p-dropdown
+          [options]="cities"
+          [(ngModel)]="selectedCity"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Title"
+        />
+      </div>
+      <div class="flex-grow-1 flex flex-column">
+        <label for="username" class="form-label"
+          >First Name<span class="font-12 text-red-500">*</span></label
+        >
+        <input pInputText id="username" placeholder="Enter First Name" />
+      </div>
+      <div class="flex-grow-1 flex flex-column">
+        <label for="username" class="form-label"
+          >Last Name<span class="font-12 text-red-500">*</span></label
+        >
+        <input pInputText id="username" placeholder="Enter Last Name" />
+      </div>
+    </div>
+  </div>
+  <div class="flex-1 flex align-items-center justify-content-left gap-3 mb-3">
+    <div class="flex-grow-1 flex flex-column">
+      <label for="username" class="form-label"
+        >Email ID<span class="font-12 text-red-500">*</span></label
+      >
+      <input pInputText id="username" placeholder="Enter Email" />
+    </div>
+    <div class="flex-grow-1 flex flex-column" style="max-width: 125px">
+      <label for="username" class="form-label"
+        >Date of Birth<span class="font-12 text-red-500">*</span></label
+      >
+      <p-calendar
+        [(ngModel)]="dob"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        inputId="birth_date"
+        dateFormat="mm-dd-yy"
+        placeholder="DOB"
+        class="w-full"
+      />
+    </div>
+    <div class="flex-grow-1 flex flex-column" style="max-width: 200px">
+      <label for="username" class="form-label"
+        >SSN<span class="font-12 text-red-500">*</span></label
+      >
+      <input type="text" pInputText placeholder="Enter SSN" />
+    </div>
+  </div>
+  <div class="flex">
+    <div class="flex-grow-1 flex flex-column mb-3" style="width: 250px">
+      <label for="username" class="form-label"
+        >Phone Number<span class="font-12 text-red-500">*</span></label
+      >
+      <div class="phone-field flex mb-2">
+        <p-dropdown
+          [options]="mobilenotype"
+          [(ngModel)]="selectedmobilenotype"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Type"
+        />
+        <p-inputMask
+          class="w-full"
+          mask="(605) 989-9980"
+          placeholder="(XXX) XXX-XXXX"
+        />
+        <p-button
+          icon="pi pi-minus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+          (click)="removePhoneNumber()"
+          *ngIf="phonenumber2"
+        />
+        <p-button
+          icon="pi pi-plus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+          *ngIf="!phonenumber2"
+          (click)="addPhoneNumber()"
+        />
+      </div>
+      <div class="phone-field flex" *ngIf="phonenumber2">
+        <p-dropdown
+          [options]="mobilenotype"
+          [(ngModel)]="selectedmobilenotype"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Type"
+        />
+        <p-inputMask
+          class="w-full"
+          mask="(605) 989-9980"
+          placeholder="(XXX) XXX-XXXX"
+        />
+        <p-button
+          icon="pi pi-minus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+          (click)="removePhoneNumber()"
+        />
+        <p-button
+          icon="pi pi-plus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-column">
+    <p-divider align="left" type="dotted">
+      <div class="flex flex-grow-1" style="width: 190px">
+        <!-- <label for="username" class="form-label">Address Type</label> -->
+        <p-dropdown
+          [options]="addresstype"
+          [(ngModel)]="selectedaddresstype"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Select Address Type"
+        />
+        <p-button
+          icon="pi pi-plus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Address"
+          [outlined]="true"
+          (click)="addAddress()"
+        />
+        <p-button
+          icon="pi pi-minus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Address"
+          [outlined]="true"
+          *ngIf="address2"
+          (click)="removeAddress()"
+        />
+      </div>
+    </p-divider>
+    <div class="flex flex-column">
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 1</label>
+            <input pInputText id="username" placeholder="Address Line 1" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 2</label>
+            <input pInputText id="username" placeholder="Address Line 2" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">ZIP Code</label>
+            <input pInputText id="username" placeholder="Enter" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">City</label>
+            <input
+              pInputText
+              id="username"
+              placeholder="City"
+              [disabled]="true"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-5">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">State</label>
+            <input
+              pInputText
+              id="username"
+              placeholder="State"
+              [disabled]="true"
+            />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Country</label>
+            <input
+              pInputText
+              id="username"
+              placeholder="Country"
+              [disabled]="true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-column" *ngIf="address2">
+      <p-divider align="left" type="dotted">
+        <div class="flex flex-grow-1" style="width: 190px">
+          <!-- <label for="username" class="form-label">Address Type</label> -->
+          <p-dropdown
+            [options]="addresstype"
+            [(ngModel)]="selectedaddresstype"
+            [checkmark]="false"
+            optionLabel="name"
+            [showClear]="false"
+            placeholder="Select Address Type"
+          />
+          <p-button
+            icon="pi pi-plus"
+            class="ml-2"
+            tooltipPosition="top"
+            pTooltip="Add Address"
+            [outlined]="true"
+            (click)="addAddress()"
+          />
+          <p-button
+            icon="pi pi-minus"
+            class="ml-2"
+            tooltipPosition="top"
+            pTooltip="Add Address"
+            [outlined]="true"
+            *ngIf="address2"
+            (click)="removeAddress()"
+          />
+        </div>
+      </p-divider>
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 1</label>
+            <input pInputText id="username" value="47 W, 13th St" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 2</label>
+            <input pInputText id="username" value="2 - Kelley Road" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">ZIP Code</label>
+            <input pInputText id="username" value="01002" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">City</label>
+            <input pInputText id="username" value="Amherst" [disabled]="true" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-5">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">State</label>
+            <input pInputText id="username" value="MA" [disabled]="true" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Country</label>
+            <input pInputText id="username" value="US" [disabled]="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer" class="py-2">
+    <p-button
+      label="Cancel"
+      severity="secondary"
+      [outlined]="true"
+      (click)="showAddClient = false"
+    />
+    <p-button label="Create" (click)="showAddClient = false" />
+  </ng-template>
+</p-dialog>
+
+<!-- Edit Client Modal -->
+<p-dialog
+  header="Mr. Charles Smith"
+  [(visible)]="showClientEdit"
+  [modal]="true"
+  [styleClass]="'custom-label-form'"
+  [breakpoints]="{ '699px': '100%' }"
+  [style]="{ width: '699px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="flex mb-3">
+    <div class="flex-1 flex align-items-center justify-content-center gap-3">
+      <div class="flex-grow-1 flex flex-column" style="width: 0">
+        <label for="username" class="form-label">Title</label>
+        <p-dropdown
+          [options]="cities"
+          [(ngModel)]="selectedCity"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Title"
+        />
+      </div>
+      <div class="flex-grow-1 flex flex-column">
+        <label for="username" class="form-label"
+          >First Name<span class="font-12 text-red-500">*</span></label
+        >
+        <input pInputText id="username" value="Charles" />
+      </div>
+      <div class="flex-grow-1 flex flex-column">
+        <label for="username" class="form-label"
+          >Last Name<span class="font-12 text-red-500">*</span></label
+        >
+        <input pInputText id="username" value="Smith" />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex align-items-center justify-content-left gap-3 mb-3">
+    <div class="flex-grow-1 flex flex-column">
+      <label for="username" class="form-label"
+        >Email ID<span class="font-12 text-red-500">*</span></label
+      >
+      <input
+        pInputText
+        id="username"
+        placeholder="Enter Email"
+        value="cssmith@gmail.com"
+      />
+    </div>
+    <div class="flex-grow-1 flex flex-column" style="max-width: 125px">
+      <label for="username" class="form-label"
+        >Date of Birth<span class="font-12 text-red-500">*</span></label
+      >
+      <p-calendar
+        [(ngModel)]="dob"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        inputId="birth_date"
+        dateFormat="mm-dd-yy"
+        placeholder="DOB"
+        class="w-full"
+      />
+    </div>
+    <div class="flex-grow-1 flex flex-column" style="max-width: 200px">
+      <label for="username" class="form-label"
+        >SSN<span class="font-12 text-red-500">*</span></label
+      >
+      <input
+        type="text"
+        pInputText
+        placeholder="Enter SSN"
+        value="12345678901234"
+      />
+    </div>
+  </div>
+
+  <div class="flex">
+    <div class="flex-grow-1 flex flex-column mb-3" style="width: 250px">
+      <label for="username" class="form-label"
+        >Phone Number<span class="font-12 text-red-500">*</span></label
+      >
+      <div class="phone-field flex mb-2">
+        <p-dropdown
+          [options]="mobilenotype"
+          [(ngModel)]="selectedmobilenotype"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Type"
+        />
+        <p-inputMask
+          class="w-full"
+          mask="(605) 989-9980"
+          placeholder="(XXX) XXX-XXXX"
+        />
+        <p-button
+          icon="pi pi-minus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+          (click)="removePhoneNumber()"
+          *ngIf="phonenumber2"
+        />
+        <p-button
+          icon="pi pi-plus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+          (click)="addPhoneNumber()"
+        />
+      </div>
+      <div class="phone-field flex" *ngIf="phonenumber2">
+        <p-dropdown
+          [options]="mobilenotype"
+          [(ngModel)]="selectedmobilenotype"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Type"
+        />
+        <p-inputMask
+          class="w-full"
+          mask="(XXX) XXX-XXX"
+          placeholder="(XXX) XXX-XXXX"
+          value="(651) 737-3267"
+        />
+        <p-button
+          icon="pi pi-minus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+          (click)="removePhoneNumber()"
+        />
+        <p-button
+          icon="pi pi-plus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Phone Number"
+          [outlined]="true"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-column">
+    <p-divider align="left" type="dotted">
+      <div class="flex flex-grow-1" style="width: 190px">
+        <!-- <label for="username" class="form-label">Address Type</label> -->
+        <p-dropdown
+          [options]="addresstype"
+          [(ngModel)]="selectedaddresstype"
+          [checkmark]="false"
+          optionLabel="name"
+          [showClear]="false"
+          placeholder="Select Address Type"
+        />
+        <p-button
+          icon="pi pi-plus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Address"
+          [outlined]="true"
+          (click)="addAddress()"
+        />
+        <p-button
+          icon="pi pi-minus"
+          class="ml-2"
+          tooltipPosition="top"
+          pTooltip="Add Address"
+          [outlined]="true"
+          *ngIf="address2"
+          (click)="removeAddress()"
+        />
+      </div>
+    </p-divider>
+    <div class="flex flex-column">
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 1</label>
+            <input pInputText id="username" value="47 W, 13th St" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 2</label>
+            <input pInputText id="username" value="2 - Kelley Road" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">ZIP Code</label>
+            <input pInputText id="username" value="01002" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">City</label>
+            <input pInputText id="username" value="Amherst" [disabled]="true" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-5">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">State</label>
+            <input pInputText id="username" value="MA" [disabled]="true" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Country</label>
+            <input pInputText id="username" value="US" [disabled]="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-column" *ngIf="address2">
+      <p-divider align="left" type="dotted">
+        <div class="flex flex-grow-1" style="width: 190px">
+          <!-- <label for="username" class="form-label">Address Type</label> -->
+          <p-dropdown
+            [options]="addresstype"
+            [(ngModel)]="selectedaddresstype"
+            [checkmark]="false"
+            optionLabel="name"
+            [showClear]="false"
+            placeholder="Select Address Type"
+          />
+          <p-button
+            icon="pi pi-plus"
+            class="ml-2"
+            tooltipPosition="top"
+            pTooltip="Add Address"
+            [outlined]="true"
+            (click)="addAddress()"
+          />
+          <p-button
+            icon="pi pi-minus"
+            class="ml-2"
+            tooltipPosition="top"
+            pTooltip="Add Address"
+            [outlined]="true"
+            *ngIf="address2"
+            (click)="removeAddress()"
+          />
+        </div>
+      </p-divider>
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 1</label>
+            <input pInputText id="username" value="47 W, 13th St" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Address Line 2</label>
+            <input pInputText id="username" value="2 - Kelley Road" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-3">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">ZIP Code</label>
+            <input pInputText id="username" value="01002" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">City</label>
+            <input pInputText id="username" value="Amherst" [disabled]="true" />
+          </div>
+        </div>
+      </div>
+      <div class="flex mb-5">
+        <div
+          class="flex-1 flex align-items-center justify-content-center gap-3"
+        >
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">State</label>
+            <input pInputText id="username" value="MA" [disabled]="true" />
+          </div>
+          <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Country</label>
+            <input pInputText id="username" value="US" [disabled]="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <p-divider align="left" type="dotted" class="m-0">
+        <span class="font-14 text-color-secondary">Bank Details</span>
+    </p-divider> -->
+  <!-- <div class="flex mb-3">
+        <div class="flex-1 flex align-items-center justify-content-center gap-3">
+            <div class="flex-grow-1 flex flex-column">
+                <label for="username" class="form-label">SSN</label>
+                <input type="text" pInputText value="12345678901234" [disabled]="true" />
+            </div>
+        </div>
+    </div> -->
+  <ng-template pTemplate="footer" class="py-2">
+    <p-button
+      label="Cancel"
+      severity="secondary"
+      [outlined]="true"
+      (click)="showClientEdit = false"
+    />
+    <p-button label="Update" (click)="showClientEdit = false" />
+  </ng-template>
+</p-dialog>
+
+<!-- Commnents -->
+<p-dialog
+  header="Notes"
+  [(visible)]="showCommentsModal"
+  [modal]="true"
+  [styleClass]="'search-client'"
+  [breakpoints]="{ '500px': '100%' }"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div
+    class="comment-input flex flex-grow-1 align-item-center justify-content-center p-3 gap-3"
+  >
+    <textarea
+      rows="3"
+      class="flex-grow-1"
+      pInputTextarea
+      placeholder="Enter Comment"
+    ></textarea>
+    <p-button label="Submit" />
+  </div>
+
+  <div class="comment-timeline card flex flex-wrap gap-6 p-3 custom-scrollbar">
+    <p-timeline [value]="advisorComments" class="w-full" align="left">
+      <ng-template pTemplate="content" let-comment>
+        <div class="flex flex-column pb-5">
+          <span>{{ comment.comment }}</span>
+          <span class="text-color-secondary font-14 mt-2">{{
+            comment.date
+          }}</span>
+        </div>
+      </ng-template>
+    </p-timeline>
+  </div>
+  <div class="flex flex-grow-1 align-item-center justify-content-center py-3">
+    <p-button label="Close" (onClick)="(showCommentsModal == false)" />
+  </div>
+</p-dialog>

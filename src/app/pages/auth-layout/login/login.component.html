@@ -1,0 +1,23 @@
+<div
+  class="flex flex-column align-items-center justify-content-center h-screen bg-gradient-to-br from-blue-500 to-purple-500"
+>
+  <p-card styleClass="w-30rem shadow-5 border-round-lg">
+    <div class="flex flex-column gap-3 p-5">
+      <h2 class="text-center text-3xl font-bold mb-4">Welcome</h2>
+      <div class="flex align-items-center justify-content-center gap-2">
+        <span>Continue Sign-in or Signup</span>
+      </div>
+      <div>
+        <p-button
+          styleClass="w-full"
+          label="Continue"
+          class="text-center"
+          (onClick)="login()"
+        ></p-button>
+      </div>
+      <div class="flex justify-content-center mt-3">
+        <a href="#" class="text-blue-500 hover:underline">Need Help?</a>
+      </div>
+    </div>
+  </p-card>
+</div>

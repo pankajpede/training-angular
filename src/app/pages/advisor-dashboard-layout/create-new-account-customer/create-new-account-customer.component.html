@@ -1,0 +1,1230 @@
+<!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Grey+Qo&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet"> -->
+
+<div class="flex justify-content-between flex-wrap mb-2">
+    <div class="flex align-items-center justify-content-center">
+        <div class="page-title float-left">
+            <div class="breadcrum float-left w-100">
+                <a class="text-muted"><i class="pi pi-home float-left font-16"></i></a>
+            </div>
+            <div class="page-heading float-left w-100">
+                <span class="font-18 font-semibold text-primary">New HYSA account opening process</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-column">
+        <circle-progress
+        [percent]="applicationCompletionStatus"
+        [radius]="25"
+        [outerStrokeWidth]="3"
+        [innerStrokeWidth]="3"
+        [outerStrokeColor]="'#78C000'"
+        [innerStrokeColor]="'#C7E596'"
+        [animation]="true"
+        [showSubtitle]="false"
+        [titleFontSize]="'14'"
+        [backgroundPadding]="0"
+        [space]="2"
+        [animationDuration]="300"
+        [startFromZero]="false"
+        ></circle-progress>
+        <p class="font-12" style="position: relative;top: -8px;">Complete</p>
+    </div>
+    <!-- <div class="set-size charts-container">
+        <div class="pie-wrapper progress-45 style-2">
+            <span class="label">{{applicationCompletionStatus}}<span class="smaller">%</span></span>
+            <div class="pie">
+            <div class="left-side half-circle"></div>
+            <div class="right-side half-circle"></div>
+            </div>
+            <div class="shadow"></div>
+        </div>
+    </div> -->
+    <!-- <div class="top-action-wrapper flex align-items-center justify-content-center">
+        <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+            <p-dropdown 
+            [options]="accounttype" [(ngModel)]="selectedaccounttype" [checkmark]="false" 
+            optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'" class="mr-1" />
+        </div>
+    </div> -->
+</div>
+
+<p-tabView [(activeIndex)]="activeIndex">
+    <!-- Bank Agreements Start -->
+    <p-tabPanel>
+        <ng-template pTemplate="header">
+            <p [ngClass]="activeIndex >= 1 ? 'completed' : '' ">
+                <i class="pi pi-check-circle text-green-500 mr-2 font-14 pull-left" *ngIf="activeIndex >= 1"></i>
+                Bank Agreements
+            </p>
+        </ng-template>
+        
+        <div class="holder-wrapper float-left w-full">
+            <div class="sidemenu float-left">
+                <ul>
+                    <li class="cursor-pointer" [ngClass]="[tabClientDetails ? 'active' : '', subtabCompleteted1 ? 'completed' : '', activeIndex >= 1 ? 'completed' : '' ]" (click)="tabClientDetailsActive()"><span>1</span> Terms & Conditions</li>
+                    <li class="cursor-pointer" [ngClass]="[tabAdvisorAgreement ? 'active' : '', subtabCompleteted2 ? 'completed' : '', activeIndex >= 1 ? 'completed' : '' ]" (click)="tabtabAdvisorAgreementActive()"><span>2</span> Privacy Policy </li>
+                    <li class="cursor-pointer" [ngClass]="[tabBankDocuments ? 'active' : '',activeIndex >= 1 ? 'completed' : '' ]" (click)="tabBankDocumentsActive()"><span>3</span>Product Info</li>
+                </ul>
+            </div>
+            <div class="content float-left flex flex-column justify-content-center pl-3">
+                <!-- client details start here -->
+                <div class="flex flex-column" *ngIf="tabClientDetails">
+                    <p class="mt-1 mb-3">Please read through the terms and conditions carefully. Once ready, scroll to the bottom to sign the agreements to continue.</p>
+                    <div class="pdf-wrapper pull-left w-100">
+                        <iframe src="./assets/pdf/terms-and-condition.html" width="100%" height="6400px"></iframe>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex-grow-1 flex flex-column" style="max-width: 175px;">
+                                <div class="flex gap-2 mb-3">
+                                    <p-checkbox formControlName="city" value="New York" inputId="ny" />
+                                    <label for="ny">I agree to privacy policy</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex justify-content-center gap-3">
+                                <p-button label="Save" severity="secondary" [outlined]="true" />
+                                <p-button label="Next" (onClick)="tabtabAdvisorAgreementActive()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- client details end here -->
+
+                <!-- Advisor Agreement start here -->
+                <div class="flex flex-column" *ngIf="tabAdvisorAgreement">
+                    <p class="mt-1 mb-3">Please read our privacy policy carefully and acknowledge your understanding to proceed.</p>
+                    <div class="pdf-wrapper pull-left w-100">
+                        <iframe src="./assets/pdf/privacy-policy.html" width="100%" height="2600px"></iframe>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex-grow-1 flex flex-column" style="max-width: 400px;">
+                                <label for="username" class="form-label">Please sign inside below box</label>
+                                <span class="sign-wrapper mb-2" style="height:75px">
+                                    <span class="sign"></span>
+                                </span>
+                                <!-- <input pInputText placeholder="" value="" style="height: 46px;font-family: Grey Qo;font-size: 50px;position: relative;text-align: center;" class="mb-2" [disabled]="true"/> -->
+                                <!-- <input pInputText [(ngModel)]="sign" placeholder="Enter Name" /> -->
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <div class="flex justify-content-center gap-3 mt-3">
+                                <p-button label="Save" severity="secondary" [outlined]="true" />
+                                <p-button label="Sign & Next" (click)="tabBankDocumentsActive()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Advisor Agreement end here -->
+
+                <!-- Bank Documents Start here -->
+                <div class="flex flex-column" *ngIf="tabBankDocuments">
+                    <p class="mt-1 mb-3">Please read through the terms and conditions carefully. Once ready, scroll to the bottom to sign the agreements to continue.</p>
+                    <div class="pdf-wrapper pull-left w-100">
+                        <iframe src="./assets/pdf/product_info.html" width="100%" height="2450px"></iframe>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex-grow-1 flex flex-column" style="max-width: 400px;">
+                                <label for="username" class="form-label">Full Name <span class="font-italic font-12 text-color-secondary">(Please check digital sign shown below)</span></label>
+                                <input pInputText [(ngModel)]="sign" placeholder="Enter Name" class="mb-2"/>
+                                <span class="sign-wrapper">
+                                    <span class="sign">{{sign}}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <div class="flex justify-content-center gap-3 mt-3">
+                                <p-button label="Save" severity="secondary" [outlined]="true" />
+                                <p-button label="Sign & Next" (onClick)="activeIndex = 1;applicationCompletionStatus = 20"/>
+                                <!-- <p-button label="Sign & Next" (onClick)="tabClientDetailsActive();"/> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Bank Documents end here -->
+            </div>
+        </div>
+    </p-tabPanel>
+
+    <!-- Advisor Agreement Start -->
+    <p-tabPanel>
+        <ng-template pTemplate="header">
+            <p [ngClass]="activeIndex >= 2 ? 'completed' : '' ">
+                <i class="pi pi-check-circle text-green-500 mr-2 font-14 pull-left" *ngIf="activeIndex >= 2"></i>
+                Advisor Agreement
+            </p>
+        </ng-template>
+        
+        <div class="holder-wrapper float-left w-full">
+            <div class="sidemenu float-left">
+                <ul>
+                    <li class="cursor-pointer" [ngClass]="[tabClientDetails ? 'active' : '', activeIndex >= 2 ? 'completed' : '' ]" (click)="tabClientDetailsActive()"><span>1</span> Advisor Investment</li>
+                    <li class="cursor-pointer" [ngClass]="[tabAdvisorAgreement ? 'active' : '', activeIndex >= 2 ? 'completed' : '']" (click)="tabtabAdvisorAgreementActive()"><span>2</span> Customer Relationship </li>
+                    <li class="cursor-pointer" [ngClass]="[tabBankDocuments ? 'active' : '', activeIndex >= 2 ? 'completed' : '']" (click)="tabBankDocumentsActive()"><span>3</span>Fee Disclosure</li>
+                </ul>
+            </div>
+            <div class="content float-left flex flex-column justify-content-center pl-3">
+                <p class="mt-1 mb-3">Please read through the terms and conditions carefully. Once ready, scroll to the bottom to sign the agreements to continue.</p>
+                <!-- client details start here -->
+                <div class="flex flex-column" *ngIf="tabClientDetails">
+                    <div class="pdf-wrapper pull-left w-100">
+                        <iframe src="./assets/pdf/AdvisoryAgreement.html" width="100%" height="4850px"></iframe>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex-grow-1 flex flex-column" style="max-width: 175px;">
+                                <div class="flex gap-2 mb-3">
+                                    <p-checkbox formControlName="city" value="New York" inputId="ny" />
+                                    <label for="ny">I agree to privacy policy</label>
+                                </div>
+                                <!-- <label for="username" class="form-label">Full Name <span class="font-italic font-12 text-color-secondary">(Please check digital sign shown below)</span></label>
+                                <input pInputText [(ngModel)]="sign" placeholder="Enter Name" class="mb-2"/>
+                                <span class="sign-wrapper">
+                                    <span class="sign">{{sign}}</span>
+                                </span> -->
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <div class="flex justify-content-center gap-3">
+                                <p-button label="Save" severity="secondary" [outlined]="true" />
+                                <p-button label="Sign & Next" (onClick)="tabtabAdvisorAgreementActive()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- client details end here -->
+
+                <!-- Advisor Agreement start here -->
+                <div class="flex flex-column" *ngIf="tabAdvisorAgreement">
+                    <div class="pdf-wrapper pull-left w-100">
+                        <iframe src="./assets/pdf/Customer-Relationship-Summary.html" width="100%" height="4850px"></iframe>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex-grow-1 flex flex-column" style="max-width: 400px;">
+                                <span class="sign-wrapper mb-2" style="height:75px">
+                                    <span class="sign">{{sign}}</span>
+                                </span>
+                                <!-- <input pInputText placeholder="" value="" style="height: 46px;font-family: Grey Qo;font-size: 50px;position: relative;text-align: center;" class="mb-2" [disabled]="true"/> -->
+                                <!-- <input pInputText [(ngModel)]="sign" placeholder="Enter Name" /> -->
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <div class="flex justify-content-center gap-3 mt-3">
+                                <p-button label="Save" severity="secondary" [outlined]="true" />
+                                <p-button label="Sign & Next" (click)="tabBankDocumentsActive()"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Advisor Agreement end here -->
+
+                <!-- Bank Documents Start here -->
+                <div class="flex flex-column" *ngIf="tabBankDocuments">
+                    <div class="pdf-wrapper pull-left w-100">
+                        <iframe src="./assets/pdf/fees-discloser.html" width="100%" height="9000px"></iframe>
+                        <div class="flex justify-content-center mt-3">
+                            <div class="flex-grow-1 flex flex-column" style="max-width: 400px;">
+                                <label for="username" class="form-label">Full Name <span class="font-italic font-12 text-color-secondary">(Please check digital sign shown below)</span></label>
+                                <input pInputText [(ngModel)]="sign" placeholder="Enter Name" class="mb-2"/>
+                                <span class="sign-wrapper">
+                                    <span class="sign">{{sign}}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <div class="flex justify-content-center gap-3 mt-3">
+                                <p-button label="Save" severity="secondary" [outlined]="true" />
+                                <p-button label="Sign & Next" (onClick)="activeIndex = 2;applicationCompletionStatus = 40"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Bank Documents end here -->
+            </div>
+        </div>
+    </p-tabPanel>
+
+    <!-- Personal details Details Start -->
+    <p-tabPanel>
+        <ng-template pTemplate="header">
+            <p [ngClass]="activeIndex >= 3 ? 'completed' : '' ">
+                <i class="pi pi-check-circle text-green-500 mr-2 font-14 pull-left" *ngIf="activeIndex >= 3"></i>
+                Personal Details
+            </p>
+        </ng-template>
+        
+        <div class="flex flex-column">
+
+            <div class="flex justify-content-between flex-wrap mt-1 mb-4">
+                <span class="pull-left">Confirm your personal details and submit to Bank for verifiation.</span>
+                <span *ngIf="!statusDataVerifying"><i class="pi pi-exclamation-triangle text-orange-500 font-16 mr-1"></i> Bank verification Pending</span>
+                <span *ngIf="statusDataVerifying"><i class="pi pi-check-circle text-green-500 font-16 mr-1"></i> Bank verification success</span>
+            </div>
+            <!-- <p class="mt-1 mb-3">
+                <span class="pull-left">Confirm your personal details and submit to Bank for verifiation.</span>
+                <span><i class="pi pi-exclamation-triangle text-orange-500 font-16"></i> Bank verification Pending</span>
+            </p> -->
+            
+            <div class="flex w-full gap-3 mb-3">
+                <div class="flex-grow-1 flex flex-column">
+                    <label for="username" class="form-label">Full Name<span class="font-12 text-red-500">*</span></label>
+                    <input class="w-full" pInputText id="username" value="Mr. Charles Smith" />
+                </div>
+                <div class="flex-grow-1 flex flex-column">
+                    <label for="username" class="form-label">Primary Email<span class="font-12 text-red-500">*</span></label>
+                    <input class="w-full" pInputText id="username" value="cssmith@gmail.com" />
+                </div>
+                <div class="flex-grow-1 flex flex-column" style="max-width:180px">
+                    <label for="username" class="form-label">Date of Birth<span class="font-12 text-red-500">*</span></label>
+                    <p-calendar [(ngModel)]="dob" [iconDisplay]="'input'" [showIcon]="true" inputId="birth_date" 
+                    dateFormat="mm-dd-yy" placeholder="DOB" class="w-full" />
+                </div>
+                <div class="flex-grow-1 flex flex-column">
+                    <label for="username" class="form-label">SSN<span class="font-12 text-red-500">*</span></label>
+                    <input type="text" pInputText value="12345678901234" [disabled]="true" />
+                </div>
+            </div>
+            <div class="flex-1 flex-column">
+                <p-divider align="left" type="dotted">
+                    <div class="flex flex-grow-1" style="width:190px;">
+                        <!-- <label for="username" class="form-label">Address Type</label> -->
+                        <p-dropdown 
+                        [options]="addresstype" 
+                        [(ngModel)]="selectedaddresstype"
+                        [checkmark]="false" 
+                        optionLabel="name" 
+                        [showClear]="false"
+                        placeholder="Select Address Type" />
+                    </div>
+                </p-divider>
+                <div class="flex flex-column overflow-hidden gap-3">
+                    <div class="flex gap-2">
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Address Line 1<span class="font-12 text-red-500">*</span></label>
+                            <input pInputText id="username" value="4049 Ivins Ave" />
+                        </div>
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Address Line 2</label>
+                            <input pInputText id="username" value="Egg Harbor Township" />
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">ZIP Code<span class="font-12 text-red-500">*</span></label>
+                            <input pInputText id="username" value="10007" />
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">City</label>
+                            <input pInputText id="username" value="New York" [disabled]="true" />
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">State</label>
+                            <input pInputText id="username" value="Egg Harbor Township" [disabled]="true" >
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">Country</label>
+                            <input pInputText id="username" value="NY" [disabled]="true" />
+                        </div>
+                        <p-button icon="pi pi-plus bg-white" class="mt-4" tooltipPosition="top" pTooltip="Add Address" [outlined]="true"
+                        *ngIf="!address2" (click)="addAddress()"/>
+                        <p-button icon="pi pi-minus bg-white" class="mt-4" tooltipPosition="top" pTooltip="Add Address" [outlined]="true" 
+                        *ngIf="address2" (click)="removeAddress()"/>
+                    </div>
+                </div>
+                <div class="flex flex-column overflow-hidden gap-3 mt-3" *ngIf="address2">
+                    <div class="flex gap-2">
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Address Line 1<span class="font-12 text-red-500">*</span></label>
+                            <input pInputText id="username" value="4049 Ivins Ave" />
+                        </div>
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Address Line 2</label>
+                            <input pInputText id="username" value="Egg Harbor Township" />
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">ZIP Code<span class="font-12 text-red-500">*</span></label>
+                            <input pInputText id="username" value="10007" />
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">City</label>
+                            <input pInputText id="username" value="New York" [disabled]="true" />
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">State</label>
+                            <input pInputText id="username" value="Egg Harbor Township" [disabled]="true" >
+                        </div>
+                        <div class="flex-none flex flex-column" style="width: 120px;">
+                            <label for="username" class="form-label">Country</label>
+                            <input pInputText id="username" value="NY" [disabled]="true" />
+                        </div>
+                        <p-button icon="pi pi-minus bg-white" class="mt-4" tooltipPosition="top" pTooltip="Add Address" [outlined]="true" 
+                        *ngIf="address2" (click)="removeAddress()"/>
+                        <p-button icon="pi pi-plus bg-white" class="mt-4" tooltipPosition="top" pTooltip="Add Address" [outlined]="true" (click)="addAddress()"/>
+                    </div>
+                </div>
+            </div>
+            <div class="flex mt-5">
+                <div class="flex-1 flex-column mb-3" style="width: 250px;">
+                    <label for="username" class="form-label">Phone Number<span class="font-12 text-red-500">*</span><span class="font-12 text-red-500">*</span></label>
+                    <div class="flex">
+                        <div class="phone-field flex mb-2">
+                            <p-dropdown  [options]="mobilenotype" [(ngModel)]="selectedmobilenotype" [checkmark]="false" 
+                            optionLabel="name"  [showClear]="false" placeholder="Type"/>
+                            <p-inputMask class="w-full" mask="(605) 989-9980" placeholder="(XXX) XXX-XXXX"/>
+                            <p-button icon="pi pi-minus" class="ml-2" tooltipPosition="top" pTooltip="Add Phone Number" [outlined]="true" (click)="removePhoneNumber()" *ngIf="phonenumber2"/>
+                            <p-button icon="pi pi-plus" class="ml-2" tooltipPosition="top" pTooltip="Add Phone Number" [outlined]="true" (click)="addPhoneNumber()" *ngIf="!phonenumber2"/>
+                        </div>
+                        <div class="phone-field flex ml-3" *ngIf="phonenumber2">
+                            <p-dropdown  [options]="mobilenotype" [(ngModel)]="selectedmobilenotype" [checkmark]="false" 
+                            optionLabel="name"  [showClear]="false" placeholder="Type"/>
+                            <p-inputMask class="w-full" mask="(605) 989-9980" placeholder="(XXX) XXX-XXXX"/>
+                            <p-button icon="pi pi-minus" class="ml-2" tooltipPosition="top" pTooltip="Add Phone Number" [outlined]="true" (click)="removePhoneNumber()"/>
+                            <p-button icon="pi pi-plus" class="ml-2" tooltipPosition="top" pTooltip="Add Phone Number" [outlined]="true"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="flex justify-content-center mt-3">
+                <div class="flex justify-content-center gap-3 mt-3">
+                    <p-button label="Save" severity="secondary" [outlined]="true" />
+                    <p-button label="Save & Next" (onClick)="tabtabAdvisorAgreementActive()" />
+                </div>
+            </div> -->
+
+            <div class="flex justify-content-center mt-3">
+                <div class="flex justify-content-center gap-3 mt-3">
+                    <p-button label="Save" severity="secondary" [outlined]="true" />
+                    <p-button (onClick)="showSubmitToBankDialog()" label="Submit to Bank" />
+                    <!-- <p-button (onClick)="activeIndex = 3" label="Next" *ngIf="statusDataVerifying"/> -->
+                </div>
+            </div>
+            <p-dialog header="Bank Verification" [modal]="true" [(visible)]="submitToBankDialog" [style]="{ width: '30rem' }">
+                <div class="flex flex-column align-items-center justify-content-center w-full  surface-border p-3">
+                    <i class="pi pi-spin pi-spinner mt-1 mb-2 text-orange-500 font-24" style="font-size: 2rem" *ngIf="!statusDataVerifying"></i>
+                    <p class="text-center font-16" *ngIf="!statusDataVerifying"> Bank verification inprogress</p>
+                    <div class="flex flex-column justify-content-center gap-3" *ngIf="statusDataVerifying">
+                        <div class="flex justify-content-center">
+                            <i class="pi pi-check-circle text-green-500 font-24"></i>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <p class="text-center font-16"> Your information is successfully verified by the bank</p>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <p-button label="Close & Next" (onClick)="submitToBankDialog = false;activeIndex = 3" />
+                        </div>
+                    </div>
+                </div>
+            </p-dialog>
+        </div>
+    </p-tabPanel>
+    
+    <!-- Additional Information Start -->
+    <p-tabPanel>
+        <ng-template pTemplate="header">
+            <p [ngClass]="activeIndex >= 4 ? 'completed' : '' ">
+                <i class="pi pi-check-circle text-green-500 mr-2 font-14 pull-left" *ngIf="activeIndex >= 4"></i>
+                Additional Information
+            </p>
+        </ng-template>
+        
+        <!-- 1 qsn -->
+        <div class="flex flex-column mb-3">
+            <p class="my-3">Please answer the questions below to continue with your account setup.</p>
+            <p class="font-medium mb-1">1. What is your employment status?</p>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton name="AgreementStatus" value="Employed" [(ngModel)]="dueDiligenceQsn1" inputId="agremeentRadio1"/>
+                    <label for="agremeentRadio1" class="ml-2">
+                        Employed
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Self Employed" 
+                        [(ngModel)]="dueDiligenceQsn1" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Self Employed
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Unemployed" 
+                        [(ngModel)]="dueDiligenceQsn1" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Unemployed
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Student" 
+                        [(ngModel)]="dueDiligenceQsn1" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Student
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2 qsn -->
+        <div class="flex flex-column mb-3">
+            <p class="font-medium mb-1">2. Where did you get this money?</p>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Employment income" 
+                        [(ngModel)]="dueDiligenceQsn2" 
+                        inputId="agremeentRadio1"/>
+                    <label for="agremeentRadio1" class="ml-2">
+                        Employment income
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Internal Transfer" 
+                        [(ngModel)]="dueDiligenceQsn2" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Internal Transfer
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Investment income savings" 
+                        [(ngModel)]="dueDiligenceQsn2" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Investment income savings
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Legal settlement" 
+                        [(ngModel)]="dueDiligenceQsn2" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Legal settlement
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 3 qsn -->
+        <div class="flex flex-column mb-3">
+            <p class="font-medium mb-1">3. What is your occupation?</p>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Chief Executives" 
+                        [(ngModel)]="dueDiligenceQsn3" 
+                        inputId="agremeentRadio1"/>
+                    <label for="agremeentRadio1" class="ml-2">
+                        Chief Executives
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Legislators" 
+                        [(ngModel)]="dueDiligenceQsn3" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Legislators
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Human Resources Specialists" 
+                        [(ngModel)]="dueDiligenceQsn3" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Human Resources Specialists
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Accountants and Auditors" 
+                        [(ngModel)]="dueDiligenceQsn3" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        Accountants and Auditors
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 4 qsn -->
+        <div class="flex flex-column mb-3">
+            <p class="font-medium mb-1">4. What is the expected monthly total of electronic transactions that you expect to send?</p>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$0 - $1,000" 
+                        [(ngModel)]="dueDiligenceQsn4" 
+                        inputId="agremeentRadio1"/>
+                    <label for="agremeentRadio1" class="ml-2">
+                        $0 - $1,000
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$1,000 - $3,000" 
+                        [(ngModel)]="dueDiligenceQsn4" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        $1,000 - $3,000
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$3,000 - $5,000" 
+                        [(ngModel)]="dueDiligenceQsn4" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        $3,000 - $5,000
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$5,000 - $10,000" 
+                        [(ngModel)]="dueDiligenceQsn4" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        $5,000 - $10,000
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 5 qsn -->
+        <div class="flex flex-column mb-3">
+            <p class="font-medium mb-1">5. What is the expected monthly total of electronic transactions that you expect to receive?</p>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$0 - $1,000" 
+                        [(ngModel)]="dueDiligenceQsn5" 
+                        inputId="agremeentRadio1"/>
+                    <label for="agremeentRadio1" class="ml-2">
+                        $0 - $1,000
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$1,000 - $3,000" 
+                        [(ngModel)]="dueDiligenceQsn5" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        $1,000 - $3,000
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$3,000 - $5,000" 
+                        [(ngModel)]="dueDiligenceQsn5" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        $3,000 - $5,000
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="$5,000 - $10,000" 
+                        [(ngModel)]="dueDiligenceQsn5" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        $5,000 - $10,000
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 6 qsn -->
+        <div class="flex flex-column mb-3">
+            <p class="font-medium mb-1">6. Do you have a US Individual Taxpayer Identification Number (ITIN)?</p>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="Yes" 
+                        [(ngModel)]="dueDiligenceQsn6" 
+                        inputId="agremeentRadio1"/>
+                    <label for="agremeentRadio1" class="ml-2">
+                        Yes
+                    </label>
+                </div>
+                <div class="flex align-items-center mb-2">
+                    <p-radioButton 
+                        name="AgreementStatus" 
+                        value="No" 
+                        [(ngModel)]="dueDiligenceQsn6" 
+                        inputId="agremeentRadio2" />
+                    <label for="agremeentRadio2" class="ml-2">
+                        No
+                    </label>
+                </div>
+            </div>
+
+        </div>
+        <div class="flex justify-content-center mt-3">
+            <div class="flex justify-content-center gap-3 mt-3">
+                <p-button label="Save" severity="secondary" [outlined]="true" />
+                <p-button label="Submit to Bank" (onClick)="showSubmitResponceToBankDialog()"/>
+            </div>
+            <p-dialog header="Response Verification" [modal]="true" [(visible)]="submitResponceToBankDialog" [style]="{ width: '30rem' }"
+            [draggable]="false">
+                <div class="flex flex-column align-items-center justify-content-center w-full  surface-border p-3">
+                    <i class="pi pi-spin pi-spinner mt-1 mb-2 text-orange-500 font-24" style="font-size: 2rem" *ngIf="!responceToBank"></i>
+                    <p class="text-center font-16" *ngIf="!responceToBank"> Details submitted to Bank.</p>
+                    <div class="flex flex-column justify-content-center gap-3" *ngIf="responceToBank">
+                        <div class="flex justify-content-center">
+                            <i class="pi pi-check-circle text-green-500 font-24"></i>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <p class="text-center font-16"> Your information is verified successfully.</p>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <p-button label="Close & Next" (onClick)="startOpenBankAccountDialog()" />
+                        </div>
+                    </div>
+                </div>
+            </p-dialog>
+        </div>
+    </p-tabPanel>
+
+    <!-- Open account Start -->
+    <p-tabPanel>
+        <ng-template pTemplate="header">
+            <p [ngClass]="activeIndex >= 5 ? 'completed' : '' ">
+                <i class="pi pi-check-circle text-green-500 mr-2 font-14 pull-left" *ngIf="activeIndex >= 5"></i>
+                Open account
+            </p>
+        </ng-template>
+        <div class="flex flex-column justify-content-center mt-3">
+            <div class="flex flex-column align-items-center justify-content-center w-full  surface-border p-3">
+                <i class="pi pi-spin pi-spinner mt-1 mb-2 text-orange-500 font-30" style="font-size: 2rem" *ngIf="!responceToOpenAccount"></i>
+                <p class="text-center font-16" *ngIf="!responceToOpenAccount"> Processing your application to open bank account </p>
+                <div class="flex flex-column justify-content-center gap-3" *ngIf="responceToOpenAccount">
+                    <div class="flex justify-content-center">
+                        <i class="pi pi-check-circle text-green-500 font-24"></i>
+                    </div>
+                    <div class="flex flex-column justify-content-center">
+                        <p class="text-center font-20 mb-2 pull-left w-full"> Congratulations <strong>Smith!</strong></p>
+                        <p class="text-center font-16 pull-left w-full mb-2">Your bank account has been opened successfully. All the documents have been mailed to <strong>smith.b&#64;gmail.com</strong></p>
+                        <div class="flex justify-content-center flex-wrap gap-2 mb-2">
+                            <div class="flex align-items-center justify-content-center">Bank Name -</div>
+                            <div class="flex align-items-center justify-content-center"><img src="../../../../assets/images/institute/institute1.svg" height="20" /></div>
+                        </div>
+                        <p class="text-center font-16 pull-left w-full mb-2">Account Type - <strong>HYSA</strong></p>
+                        <p class="text-center font-16 pull-left w-full mb-2">Account Nubmber - <strong>5462126436</strong></p>
+                        <p class="text-center font-16 pull-left w-full mb-2">Routing Nubmber - <strong>372613664664</strong></p>
+                        <p class="text-center font-16 pull-left w-full">Balance Ammount - <strong>$0.00</strong></p>
+                        
+                    </div>
+                    <!-- <div class="flex justify-content-center" >
+                        <p-button label="Close & Next" (onClick)="startOpenBankAccountDialog()" />
+                    </div> -->
+                </div>
+            </div>
+            <div class="flex justify-content-center gap-3 mt-3">
+                <p-button label="Save" severity="secondary" [outlined]="true" />
+                <p-button label="Account Funding" (onClick)="startAccountFundingDialog = true"/>
+                <p-dialog header="Account Funding" [modal]="true" [(visible)]="startAccountFundingDialog" [style]="{ width: '30rem' }"
+                [draggable]="false">
+                    <div class="flex flex-column align-items-center justify-content-center w-full  surface-border p-3">
+                        <p class="text-center font-16 pull-left w-full mb-2">The next step is to put your money to work for you by funding the account. Which of the following methods to you prefer:</p>
+                        <div class="flex flex-column align-items-center gap-3 my-3">
+                            <div class="flex align-items-center gap-3">
+                                <p-radioButton name="AgreementStatus" value="Employed" [(ngModel)]="dueDiligenceQsn1" inputId="agremeentRadio1"/>
+                                <label for="agremeentRadio1" class="font-16">Have My Advisor Contact Me To Facilitate Account Funding</label>
+                            </div>
+                            <div class="flex align-items-center mb-2 gap-3">
+                                <p-radioButton name="AgreementStatus" value="Self Employed" [(ngModel)]="dueDiligenceQsn1" inputId="agremeentRadio2" />
+                                <label for="agremeentRadio2" class="font-16">Make A Deposite From Existing Bank Account Now Online</label>
+                            </div>
+                        </div>
+                        <div class="flex justify-content-center">
+                            <p-button label="Continue" (onClick)="startAccountFunding()" />
+                        </div>
+                    </div>
+                </p-dialog>
+            </div>
+        </div>
+    </p-tabPanel>
+
+    <!-- Link external account Start -->
+    <p-tabPanel>
+        <ng-template pTemplate="header">
+            <p>Account Funding</p>
+        </ng-template>
+        <div class="flex flex-column justify-content-center">
+            <div class="card w-full">
+                <!-- Linked Account Section -->
+                <div class="w-full" *ngIf="tabLinkedAccountAddCash">
+                    <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                        <div class="top-action-wrapper flex align-items-center justify-content-end mb-3">
+                            <div class="field-wrapper px-3 font-14">
+                                <label class="text-muted">Client Name</label>
+                                <label>John and Barnes</label>
+                            </div>
+                            <div class="field-wrapper px-3 border-left-1 border-secondary font-14">
+                                <label class="text-muted">Account Number</label>
+                                <label>FI - AP - 285927</label>
+                            </div>
+                            <div class="field-wrapper px-3 border-left-1 border-secondary font-14">
+                                <label class="text-muted">Account Balance</label>
+                                <label>$667,500.00</label>
+                            </div>
+                        </div>
+                        <!-- <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                            <p-badge [value]="linkedAccountCount" />
+                            <p class="float-left">Linked Account</p>
+                        </div> -->
+                        <div class="page-actions float-right flex flex-wrap">
+                            <p-dropdown 
+                            [options]="addcashselection" [(ngModel)]="selectedAddcashselection" [checkmark]="false" 
+                            optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                            (onChange)="addChangeTable()" class="mr-1" />
+
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                (click)="toggleSearch();LinkedAccountsListTable.filterGlobal('','contains')"
+                                *ngIf="searchExpanded" />
+                            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                <input type="text" pInputText placeholder="Search" #searchTable
+                                    (input)="LinkedAccountsListTable.filterGlobal(searchTable.value,'contains')" />
+                            </p-iconField>
+
+                            <p-button class="mr-1" icon="pi pi-table" tooltipPosition="top"
+                                pTooltip="Column Selection" (click)="addCashcoloumnSelection.toggle($event)" />
+                            <p-overlayPanel #addCashcoloumnSelection>
+                                <div *ngFor="let tableColoumn of linkedAccountDetailsListColumns"
+                                    class="field-checkbox">
+                                    <p-checkbox [(ngModel)]="linkedAccountDetailsListColumns"
+                                        [label]="tableColoumn?.header" name="header"
+                                        [value]="tableColoumn"></p-checkbox>
+                                </div>
+                            </p-overlayPanel>
+
+                            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                (click)="LinkedAccountsListTable.exportCSV()" />
+
+                            <p-divider layout="vertical" class="mx-1" />
+                            <p-button icon="pi pi-send" tooltipPosition="top" pTooltip="Add Cash"
+                                (click)="showAddCashModal = true" />
+
+                        </div>
+                    </div>
+                    <div class="custom-table mb-3">
+                        <p-table [value]="linkedAccountsList" [columns]="linkedAccountDetailsListColumns"
+                            #LinkedAccountsListTable [paginator]="false" styleClass="scrollable-custom-table"
+                            [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                            [globalFilterFields]="['accountname', 'accnameholdertype', 'bankname','acctype','accnumber','accountbalance']">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width:50px">&nbsp;</th>
+                                    <ng-container *ngFor="let column of columns">
+                                        <th [pSortableColumn]="column?.field">
+                                            <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                [showAddButton]="false" [showOperator]="false" />
+                                            {{column.header}}
+                                            <p-sortIcon [field]="column?.field" />
+                                        </th>
+                                    </ng-container>
+                                    <th alignFrozen="right" pFrozenColumn class="text-center">Actions</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                <tr>
+                                    <td class="text-center">
+                                        <!-- <p-checkbox [binary]="true" inputId="binary" /> -->
+                                        <p-radioButton name="bussinessAccount" />
+                                    </td>
+                                    <ng-container *ngFor="let column of columns">
+                                        <td *ngIf="column.field === 'accountname'" style="min-width:175px">
+                                            {{ liquidity.accountname }}
+                                        </td>
+                                        <td *ngIf="column.field === 'accnameholdertype'" style="min-width:210px">
+                                            {{ liquidity.accnameholdertype }}
+                                        </td>
+                                        <td *ngIf="column.field === 'bankname'" style="min-width:175px">
+                                            {{ liquidity.bankname }}
+                                        </td>
+                                        <td *ngIf="column.field === 'acctype'" style="min-width:175px">
+                                            {{ liquidity.acctype }}
+                                        </td>
+                                        <td *ngIf="column.field === 'accnumber'" style="min-width:185px">
+                                            {{ liquidity.accnumber }}
+                                        </td>
+                                        <td *ngIf="column.field === 'accountbalance'" class="text-right"
+                                            style="min-width: 180px;">
+                                            <span *ngIf="liquidity.isloading == true" class="text-right">
+                                                <i class="pi pi-spin pi-spinner"></i>
+                                                <span class="font-12 text-color-secondary"
+                                                    style="display: block;">Fetching Data..</span>
+                                            </span>
+                                            <span *ngIf="liquidity.isloading == false">
+                                                {{ liquidity.accountbalance }}
+                                                <span class="font-12 text-color-secondary"
+                                                    style="display: block;">{{liquidity.accbalanceasof}}</span>
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                    <td alignFrozen="right" pFrozenColumn style="width: 100px; border-left: 1px solid #E8EBF3;">
+                                        <div class="card flex justify-content-center">
+                                            <p-button severity="primary" tooltipPosition="top" pTooltip="Refresh Balance" class="mr-1" icon="pi pi-sync" size="small" [outlined]="true" />
+                                            <p-button severity="danger" tooltipPosition="top" pTooltip="Delink"
+                                                class="mr-1" icon="pi pi-link" size="small" [outlined]="true" />
+                                            <!-- <p-button severity="danger" tooltipPosition="top" pTooltip="Delete"
+                                                icon="pi pi-trash" size="small" [outlined]="true" /> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+
+                <!-- Transaction Section -->
+                <div class="w-full" *ngIf="tabTransactionAddCash">
+                    <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                        <div class="top-action-wrapper flex align-items-center justify-content-end mb-3">
+                            <div class="field-wrapper px-3 font-14">
+                                <label class="text-muted">Client Name</label>
+                                <label>John and Barnes</label>
+                            </div>
+                            <div class="field-wrapper px-3 border-left-1 border-secondary font-14">
+                                <label class="text-muted">Account Number</label>
+                                <label>FI - AP - 285927</label>
+                            </div>
+                            <div class="field-wrapper px-3 border-left-1 border-secondary font-14">
+                                <label class="text-muted">Account Balance</label>
+                                <label>$667,500.00</label>
+                            </div>
+                        </div>
+                        <!-- <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                            <p-badge [value]="cashMovementCount" />
+                            <p class="float-left">Transactions</p>
+                        </div> -->
+                        <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+
+                            <p-button icon="pi pi-send" tooltipPosition="top" pTooltip="Add Cash"
+                                (click)="showAddCashModal = true" />
+
+                            <p-divider layout="vertical" class="mx-1" />
+
+                            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                (click)="withdrawalCashTable.exportCSV()" />
+                            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top"
+                                pTooltip="Column Selection"
+                                (click)="cashmovementlistColumnSelection.toggle($event)" />
+                            <p-overlayPanel #cashmovementlistColumnSelection>
+                                <div *ngFor="let tableColoumn of cashmovementlistColumns" class="field-checkbox">
+                                    <p-checkbox [(ngModel)]="cashmovementlistColumns" [label]="tableColoumn?.header"
+                                        name="header" [value]="tableColoumn"></p-checkbox>
+                                </div>
+                            </p-overlayPanel>
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                (click)="toggleSearch();withdrawalCashTable.filterGlobal('','contains')"
+                                *ngIf="searchExpanded" />
+                            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                <input type="text" pInputText placeholder="Search" #searchTable
+                                    (input)="withdrawalCashTable.filterGlobal(searchTable.value,'contains')" />
+                            </p-iconField>
+                            <p-dropdown 
+                            [options]="addcashselection" [(ngModel)]="selectedAddcashselection" [checkmark]="false" 
+                            optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                            (onChange)="addChangeTable()" class="mr-1" />
+
+                        </div>
+                    </div>
+                    <div class="custom-table mb-3 w-full">
+                        <p-table [value]="cashmovementlist" [columns]="cashmovementlistColumns" #withdrawalCashTable
+                            [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 50, 100]"
+                            styleClass="scrollable-custom-table" [scrollable]="true"
+                            scrollHeight="calc(100vh - 305px)"
+                            [globalFilterFields]="['recipientname', 'date', 'status', 'bankname', 'transfertype', 'accnumber', 'routingnumber', 'transferamount']">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th pFrozenColumn pSortableColumn="recipientname" style="min-width:160px">
+                                        <p-columnFilter type="text" field="recipientname" display="menu"
+                                            [showAddButton]="false" [showOperator]="false" />
+                                        Sender Name
+                                        <p-sortIcon field="recipientname" />
+                                    </th>
+                                    <ng-container *ngFor="let column of columns">
+                                        <th [pSortableColumn]="column?.field">
+                                            <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                [showAddButton]="false" [showOperator]="false" />
+                                            {{column.header}}
+                                            <p-sortIcon [field]="column?.field" />
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                <tr>
+                                    <td pFrozenColumn style="min-width:250px">
+                                        {{ liquidity.sendername }}
+                                    </td>
+                                    <ng-container *ngFor="let column of columns">
+
+                                        <td *ngIf="column.field === 'date'" style="min-width:160px">
+                                            {{ liquidity.date }}
+                                        </td>
+                                        <td *ngIf="column.field === 'status'" style="min-width:160px; text-align: center;">
+                                            <!-- {{ liquidity.status }} -->
+
+                                            <span class="tag tag-success cursor-pointer" *ngIf="liquidity.status == 'Completed'">
+                                                <p-tag value="Completed" severity="success"  />
+                                            </span>
+                                            <span *ngIf="liquidity.status == 'Pending'">
+                                                <p-tag value="Pending" severity="danger" />
+                                            </span>
+                                        </td>
+                                        <td *ngIf="column.field === 'bankname'" style="min-width:160px">
+                                            {{ liquidity.bankname}}
+                                        </td>
+                                        <td *ngIf="column.field === 'transfertype'" style="min-width:170px">
+                                            {{ liquidity.transfertype}}
+                                        </td>
+                                        <td *ngIf="column.field === 'accnumber'" style="min-width:200px">
+                                            {{ liquidity.accnumber}}
+                                        </td>
+                                        <td *ngIf="column.field === 'routingnumber'" style="min-width:180px">
+                                            {{ liquidity.routingnumber}}
+                                        </td>
+                                        <td *ngIf="column.field === 'transferamount'" class="text-right"
+                                            style="min-width:180px">
+                                            {{ liquidity.transferamount | currency: 'USD' }}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-content-center">
+                <!-- <p-button label="Save" severity="secondary" [outlined]="true" /> -->
+                <p-button label="Finish" (onClick)="activeIndex = 6" />
+            </div>
+        </div>
+    </p-tabPanel>
+
+</p-tabView>
+
+
+
+
+<!-- Add Cash Modal -->
+<p-dialog header="Add Cash" [(visible)]="showAddCashModal" [modal]="true" [styleClass]="'custom-label-form'"
+    [breakpoints]="{ '1199px': '899px', '899px': '100%' }" [style]="{ width: '899px' }" [draggable]="false"
+    [resizable]="false">
+    <p-tabView [(activeIndex)]="modalActiveIndex">
+        <p-tabPanel header="Movement Details">
+            <div class="flex flex-column">
+                <p-divider align="left" type="dotted" class="m-0">
+                    <span class="font-14 text-color-secondary">Sender Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Sender Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Bank Name :</label>
+                        <label class="font-regular mr-1">Bank of Central Asia</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Recipient's Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">John and Barnes</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 512611</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Balance :</label>
+                        <label class="font-regular mr-1">$667,500.00</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">12461-141-13</label>
+                    </div>
+                </div>
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Transaction Details</span>
+                </p-divider>
+                <div class="flex align-items-top justify-content-left gap-5 mb-3">
+                    <div class="flex-1 flex align-items-top justify-content-center">
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Transaction Type</label><p-dropdown
+                                [options]="transaction" [(ngModel)]="selectedTransaction" [checkmark]="true"
+                                optionLabel="name" [showClear]="true" placeholder="Select Type" />
+                        </div>
+                    </div>
+                    <div class="flex-1 flex align-items-top justify-content-center">
+
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Transaction Amount</label>
+                            <p-inputGroup>
+                                <p-inputGroupAddon>$</p-inputGroupAddon>
+                                <input type="text" pInputText placeholder="Price" value="1,25,00.00" />
+                            </p-inputGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex align-items-center justify-content-center gap-3 mt-3">
+                <p-button label="Cancel" severity="secondary" [outlined]="true" (click)="showAddCashModal = false" />
+                <p-button label="Next" (click)="modalActiveIndex = 1" />
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Review Transaction">
+            <div class="flex flex-column">
+                <p-divider align="left" type="dotted" class="m-0">
+                    <span class="font-14 text-color-secondary">Sender Details</span>
+                </p-divider>
+
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Sender Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Bank Name :</label>
+                        <label class="font-regular mr-1">Bank of Central Asia</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Recipient's Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">John and Barnes</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 512611</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Balance :</label>
+                        <label class="font-regular mr-1">$667,500.00</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">12461-141-13</label>
+                    </div>
+                </div>
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Transaction Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Transaction Type :</label>
+                        <label class="font-regular mr-1">Same Day</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Transaction Amount :</label>
+                        <label class="font-regular mr-1">$1,25,00.00</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="flex align-items-center justify-content-center gap-3">
+                <p-button label="Back" severity="secondary" [outlined]="true" (click)="modalActiveIndex = 0" />
+                <p-button label="Confirm" (click)="modalActiveIndex = 2" />
+            </div>
+
+        </p-tabPanel>
+
+        <p-tabPanel header="Transaction Status">
+            <div class="w-100 text-center">
+                <div role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="--value: 95">
+                </div>
+                <p class="my-3 ">Transaction is under process.</p>
+                <p-button label="Close" (click)="showAddCashModal = false" />
+            </div>
+        </p-tabPanel>
+
+
+        <ng-template pTemplate="footer" class="py-2">
+            <p-button label="Back" severity="secondary" [outlined]="true" (click)="modalActiveIndex = 1" />
+            <p-button label="Next" (click)="modalActiveIndex = 2" />
+        </ng-template>
+
+
+    </p-tabView>
+</p-dialog>
+
+

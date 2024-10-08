@@ -1,0 +1,369 @@
+<div class="flex justify-content-between flex-wrap mb-2">
+    <div class="flex align-items-center justify-content-center">
+        <div class="page-title float-left">
+            <div class="breadcrum float-left w-100">
+                <a class="text-muted"><i class="pi pi-home float-left font-16"></i></a>
+                <span class="mx-2 float-left text-muted font-18">/</span>
+                <a class="text-muted font-14 text-medium">Marketplace</a>
+            </div>
+            <div class="page-heading float-left w-100">
+                <span class="font-18 font-semibold text-primary">Liquidity Marketplace</span>
+            </div>
+        </div>
+    </div>
+    <div class="top-action-wrapper flex align-items-center justify-content-center">
+        <div class="page-actions float-right flex flex-row-reverse lex-wrap">
+            <!-- <p-button icon="pi pi pi-ellipsis-v" class="mr-1" tooltipPosition="top" pTooltip="More Actions" (click)="menu.toggle($event)"/> -->
+            <!-- <p-menu class="more-action-wrapper" #menu [model]="items" [popup]="true" styleClass="preset-dropdown-wrapper"/> -->
+            <p-button icon="pi pi-plus" class="mr-1" tooltipPosition="top" pTooltip="Create New Account" [routerLink]="['/advisor-dashboard/create-new-account']" />
+            <p-divider layout="vertical" />
+            <p-button icon="pi pi-file-excel" class="mr-1" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="pt.exportCSV()"/>
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="coloumnSelection.toggle($event)" />
+            <p-overlayPanel #coloumnSelection>
+                <div *ngFor="let tableColoumn of tableColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="selectedTableColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            <p-button icon="pi pi-star" class="mr-1" tooltipPosition="top" pTooltip="Preferred"
+                (click)="showPreferred()" *ngIf="!prefferedIcon"/>
+            <p-button icon="pi pi-star-fill" class="mr-1" tooltipPosition="top" pTooltip="Preferred"
+                (click)="showPreferred()" *ngIf="prefferedIcon"/>
+                
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+            icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+            *ngIf="!searchExpanded" />
+        <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+            icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+            (click)="toggleSearch();liquidityDashboardTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+        <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+            <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+            <input type="text" pInputText placeholder="Search" #searchTable
+                (input)="liquidityDashboardTable.filterGlobal(searchTable.value,'contains')" />
+        </p-iconField>
+        <!-- <p-divider layout="vertical" />
+            <div class="create-preset-wrapper">
+                <p-button icon="pi pi-filter" class="mr-1" tooltipPosition="top" pTooltip="Filters" 
+                (click)="togglePresetFilter()"/>
+                <div class="create-preset" *ngIf="togglePresetFilterStatus">
+                    <p-accordion [multiple]="true" [activeIndex]="[0]">
+                        <p-accordionTab header="Institution Type">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="Show Institutions">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Altruist" value="Altruist" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="APEX Financial" value="APEX" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank of Utah" value="Utah" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Barclays Bank" value="Barclays" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Discover Bank" value="Discover" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="DR Bank" value="DR" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="HYSA Rate (APR)">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="HYSA FDIC Limit">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="SBL Rate (APR)">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="Product Offerings">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                    </p-accordion>
+                    <div class="preset-footer p-2">
+                        <p-button class="mr-1" label="Save Preset" size="small" />
+                        <p-button class="mr-1" label="Clear" severity="danger" size="small" [outlined]="true" />
+                        <p-button label="Delete Preset" [disabled]="true" severity="danger" size="small"
+                            [outlined]="true" />
+                    </div>
+                </div>
+            </div>
+            <div class="preset-viewer float-left mr-1">
+                <ul class="float-left m-0 p-0">
+                    <li class="active cursor-pointer float-left text-color-secondary font-14">Default</li>
+                    <li class="cursor-pointer float-left text-color-secondary font-14">HYSA Only</li>
+                    <li class="cursor-pointer float-left text-color-secondary font-14">SB + CDs</li>
+                    <li class="cursor-pointer float-left text-color-secondary">
+                        <i class="pi pi-ellipsis-v text-color-secondary" (click)="menu.toggle($event)"></i>
+                        <p-menu #menu [model]="items" [popup]="true" styleClass="preset-dropdown-wrapper" />
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="custom-table mb-3">
+    <p-table #pt [value]="LiquidityDashboard" [columns]="selectedTableColumns" #liquidityDashboardTable [paginator]="true"
+        [rows]="10" [rowsPerPageOptions]="[10, 50, 100]" styleClass="scrollable-custom-table" [scrollable]="true"
+        scrollHeight="calc(100vh - 195px)"
+        [loading]="isDataFetch"
+        [globalFilterFields]="['institution', 'hysarate', 'hysalimit', 'sblrate', 'hysa', 'sbl', 'CDs', 'brandedcc', 'martgage']">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th pFrozenColumn>&nbsp;</th>
+                <th pFrozenColumn pSortableColumn="institution" style="min-width:160px">
+                    <p-columnFilter type="text" field="institution" display="menu" [showAddButton]="false"
+                        [showOperator]="false" />
+                    Institution
+                    <p-sortIcon field="institution" />
+                </th>
+                <ng-container *ngFor="let column of columns">
+                    <th [pSortableColumn]="column?.field" [pTooltip]="column?.tooltip" tooltipPosition="bottom">
+                        <p-columnFilter type="text" [field]="column?.field" display="menu" [showAddButton]="false"
+                            [showOperator]="false" />
+                            {{column.header}}
+                        <p-sortIcon [field]="column?.field" />
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-liquidity let-columns="columns">
+            <tr>
+                <td pFrozenColumn class="text-center"><i class="pi cursor-pointer" (click)="preferredRow(liquidity)"
+                        [ngClass]="{'pi-star': !liquidity.preferred, 'pi-star-fill': liquidity.preferred}"></i></td>
+                <td pFrozenColumn class="text-center" tooltipPosition="right" pTooltip="{{liquidity.institution}}">
+                    <img src="{{ liquidity.institutionImg }}" />
+                </td>
+                <ng-container *ngFor="let column of columns">
+
+                    <td *ngIf="column.field === 'hysarate'" class="text-right">{{ liquidity.hysarate }}%</td>
+                    <td *ngIf="column.field === 'hysalimit'" class="text-right">${{ liquidity.hysalimit }} Mil</td>
+                    <td *ngIf="column.field === 'sblrate'" class="text-center">
+                        <!-- {{ liquidity.sblrate }} -->
+
+                        <span class="cursor-pointer underline" *ngIf="liquidity.sblrate == 'Tiered'"
+                            (click)="showTieredModal()">
+                            Tiered
+                        </span>
+                        <span *ngIf="liquidity.sblrate == 'N/A'">
+                            N/A
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'hysa'" class="text-center">
+                        <!-- {{ liquidity.hysa }} -->
+                        <span class="tag tag-success cursor-pointer" *ngIf="liquidity.hysa == 'Yes'"
+                            (click)="showHysaModal()">
+                            <p-tag value="Yes" severity="success" class="text-underline" />
+                        </span>
+                        <span *ngIf="liquidity.hysa == 'NA'">
+                            <p-tag value="NA" severity="danger" />
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'sbl'" class="text-center">
+                        <!-- {{ liquidity.sbl }} -->
+                        <span class="tag tag-success cursor-pointer" *ngIf="liquidity.sbl == 'Yes'"
+                            (click)="showHysaModal()">
+                            <p-tag value="Yes" severity="success" class="text-underline" />
+                        </span>
+                        <span *ngIf="liquidity.sbl == 'NA'">
+                            <p-tag value="NA" severity="danger" />
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'CDs'" class="text-center">
+                        <!-- {{ liquidity.CDs }} -->
+                        <span class="tag tag-success cursor-pointer" *ngIf="liquidity.CDs == 'Yes'"
+                            (click)="showHysaModal()">
+                            <p-tag value="Yes" severity="success" class="text-underline" />
+                        </span>
+                        <span *ngIf="liquidity.CDs == 'NA'">
+                            <p-tag value="NA" severity="danger" />
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'brandedcc'" class="text-center">
+                        <!-- {{ liquidity.brandedcc }} -->
+                        <span class="tag tag-success cursor-pointer" *ngIf="liquidity.brandedcc == 'Yes'"
+                            (click)="showHysaModal()">
+                            <p-tag value="Yes" severity="success" class="text-underline" />
+                        </span>
+                        <span *ngIf="liquidity.brandedcc == 'NA'">
+                            <p-tag value="NA" severity="danger" />
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'martgage'" class="text-center">
+                        <!-- {{ liquidity.martgage }} -->
+                        <span class="tag tag-success cursor-pointer" *ngIf="liquidity.martgage == 'Yes'"
+                            (click)="showHysaModal()">
+                            <p-tag value="Yes" severity="success" class="text-underline" />
+                        </span>
+                        <span *ngIf="liquidity.martgage == 'NA'">
+                            <p-tag value="NA" severity="danger" />
+                        </span>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<br />
+
+<p-dialog header="HYSA" [(visible)]="showHysaInfo" [modal]="true" [styleClass]="'hysa-modal'"
+    [breakpoints]="{ '699px': '100%' }" [style]="{ width: '699px' }" [draggable]="false"
+    [resizable]="false">
+    <p-tabView>
+        <p-tabPanel header="Bank Overview">
+            <div class="flex justify-content-center flex-wrap">
+                <div class="company-logo mb-3">
+                    <div class="float-left w-100 text-center">
+                        <img src="./assets/images/institute/institute1.svg" style="width: 80px;" />
+                    </div>
+                    <span class="company-name font-16 font-bold float-left w-100 text-primary">Bank Central Asia </span>
+                </div>
+            </div>
+            <p class="text-primary">The Barclays High Yield Savings account, could help your client maximize their savings with
+                a sky-high APY (annual percentage yield) and a ton of other perks, including:</p>
+            <ul>
+                <li class="mb-2 text-primary"><strong>4.83% APY</strong> -- that’s greater than 9X the national average!</li>
+                <li class="mb-2 text-primary"><strong>No Maintenance Fees</strong> -- so your Client can get at high APY without
+                    worrying about draining your money on extra fees</li>
+                <li class="mb-2 text-primary"><strong>Low Monthly Balance Requirements</strong> -- all your Client needs is $1
+                    in the account to earn the high APY of this account</li>
+                <li class="mb-2 text-primary"><strong>$4.5 Million of FDIC Insurance</strong> -- peace of mind</li>
+                <li class="mb-2 text-primary"><strong>Unlimited transfers and withdrawals</strong> -- fund the account with ease
+                </li>
+                <li class="mb-2 text-primary"><strong>24/7 Customer Support</strong> -- world-class customer service</li>
+            </ul>
+            <div class="flex justify-content-center flex-wrap">
+                <p-button label="Continue" severity="primary" size="small" (click)="showHysaInfo = false" />
+            </div>
+        </p-tabPanel>
+        
+        <p-tabPanel header="Partner Bank">
+            <div class="custom-table mb-3">
+                    <p-table [value]="LiquidityDashboard" [columns]="selectedTableColumns" #partnerBankTable [paginator]="false"
+                    [rows]="10" [rowsPerPageOptions]="[10, 50, 100]" styleClass="scrollable-custom-table" [scrollable]="true"
+                    [loading]="isDataFetch"
+                    [globalFilterFields]="['institutionLogo','institution']">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th pSortableColumn="institutionLogo" style="min-width:160px">
+                                <p-columnFilter type="text" field="institution" display="menu" [showAddButton]="false"
+                                    [showOperator]="false" />
+                                Institution Logo
+                                <p-sortIcon field="institution" />
+                            </th>
+                            <th pSortableColumn="institution">
+                                <p-columnFilter type="text" field="institution" display="menu" [showAddButton]="false"
+                                    [showOperator]="false" />
+                                Institution Name
+                                <p-sortIcon field="institution" />
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                        <tr>
+                            <td class="text-center">
+                                <img src="{{ liquidity.institutionImg }}" />
+                            </td>
+                            <td>{{liquidity.institution}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+</p-dialog>
+
+
+
+<p-dialog header="HYSA" [(visible)]="showSBLRateInfo" [modal]="true" [styleClass]="'hysa-modal'"
+    [breakpoints]="{ '1199px': '499px', '575px': '499px' }" [style]="{ width: '499px' }" [draggable]="false"
+    [resizable]="false">
+    <div class="flex justify-content-center flex-wrap">
+        <div class="company-logo mb-3">
+            <div class="float-left w-100 text-center">
+                <img src="./assets/images/institute/institute1.svg" style="width: 80px;" />
+            </div>
+            <span class="company-name font-16 font-bold float-left w-100 text-primary">Bank Central Asia </span>
+        </div>
+    </div>
+    <table class="tier-table mb-3" >
+        <thead>
+            <tr>
+                <th>Assets Tier</th>
+                <th>Rates</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>$0 to $250k</td>
+                <td>SOFR + 3.25%</td>
+            </tr>
+            <tr>
+                <td>$250k to $500k</td>
+                <td>SOFR + 3.15%</td>
+            </tr>
+            <tr>
+                <td>$500k to $1 Million</td>
+                <td>SOFR + 3.05%</td>
+            </tr>
+            <tr>
+                <td>$1 Million to $2 Million</td>
+                <td>SOFR + 2.75%</td>
+            </tr>
+            <tr>
+                <td>$2 Million to $5 Million</td>
+                <td>SOFR + 2.25%</td>
+            </tr>
+            <tr>
+                <td>Over $5 Million</td>
+                <td>SOFR + 1.85%</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flex justify-content-center flex-wrap">
+        <p-button label="Continue" severity="primary" size="small" (click)="showSBLRateInfo = false" />
+    </div>
+</p-dialog>

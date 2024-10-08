@@ -1,0 +1,266 @@
+<div class="flex justify-content-between flex-wrap mb-2">
+    <div class="flex align-items-center justify-content-center">
+        <div class="page-title float-left">
+            <div class="breadcrum float-left w-100">
+                <a class="text-muted"><i class="pi pi-home float-left font-16"></i></a>
+                <!-- <span class="mx-2 float-left text-muted font-18">/</span>
+                <a class="text-muted font-14 text-medium">Deposit Accounts</a> -->
+            </div>
+            <div class="page-heading float-left w-100">
+                <span class="font-18 font-semibold text-primary">Deposit Accounts</span>
+            </div>
+        </div>
+    </div>
+    <div class="top-action-wrapper flex align-items-center justify-content-center">
+        <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+            <!-- <p-button icon="pi pi pi-ellipsis-v" class="mr-1" tooltipPosition="top" pTooltip="More Actions" (click)="menu.toggle($event)"/> -->
+            <!-- <p-menu class="more-action-wrapper" #menu [model]="items" [popup]="true" styleClass="preset-dropdown-wrapper"/> -->
+            <p-button icon="pi pi-plus" class="mr-1" tooltipPosition="top" pTooltip="Create New Account" [routerLink]="['/advisor-dashboard/create-new-account']" />
+            <p-divider layout="vertical" />
+            <p-button icon="pi pi-file-excel" class="mr-1" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="liquidityDashboardTable.exportCSV()"/>
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="coloumnSelection.toggle($event)" />
+            <p-overlayPanel #coloumnSelection>
+                <div *ngFor="let tableColoumn of tableColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="selectedTableColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            <!-- <p-button (click)="menu.toggle($event)" icon="pi pi-ellipsis-v"/> -->
+            <!-- <p-menu #presetFilter [model]="presetItems" [popup]="true"  styleClass="preset-dropdown-wrapper"/> -->
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+                *ngIf="!searchExpanded" />
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                (click)="toggleSearch();liquidityDashboardTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                <input type="text" pInputText placeholder="Search" #searchTable
+                    (input)="liquidityDashboardTable.filterGlobal(searchTable.value,'contains')" />
+            </p-iconField>
+            <!-- <p-divider layout="vertical" />
+            <div class="create-preset-wrapper">
+                <div class="card flex justify-content-center">
+                    <p-button icon="pi pi-filter" tooltipPosition="top" pTooltip="Filters" 
+                    (click)="togglePresetFilter()"/>
+                </div>
+                <div class="create-preset" *ngIf="togglePresetFilterStatus">
+                    <p-accordion [multiple]="true" [activeIndex]="[0]">
+                        <p-accordionTab header="Institution Type">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="Show Institutions">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Altruist" value="Altruist" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="APEX Financial" value="APEX" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank of Utah" value="Utah" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Barclays Bank" value="Barclays" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Discover Bank" value="Discover" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="DR Bank" value="DR" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="HYSA Rate (APR)">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="HYSA FDIC Limit">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="SBL Rate (APR)">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                        <p-accordionTab header="Product Offerings">
+                            <ul>
+                                <li class="mb-2">
+                                    <p-checkbox label="Bank" value="Bank" ></p-checkbox>
+                                </li>
+                                <li class="mb-2">
+                                    <p-checkbox label="Financial Custodian" value="Financial" ></p-checkbox>
+                                </li>
+                            </ul>
+                        </p-accordionTab>
+                    </p-accordion>
+                    <div class="preset-footer p-2">
+                        <p-button class="mr-1" label="Save Preset" size="small" />
+                        <p-button class="mr-1" label="Clear" severity="danger" size="small" [outlined]="true" />
+                        <p-button label="Delete Preset" [disabled]="true" severity="danger" size="small"
+                            [outlined]="true" />
+                    </div>
+                </div>
+            </div>
+            <div class="preset-viewer float-left mr-1">
+                <ul class="float-left m-0 p-0">
+                    <li class="active cursor-pointer float-left text-color-secondary font-14">Default</li>
+                    <li class="cursor-pointer float-left text-color-secondary font-14">Open Accts</li>
+                    <li class="cursor-pointer float-left text-color-secondary font-14">Awaiting Funds</li>
+                    <li class="cursor-pointer float-left text-color-secondary">
+                        <i class="pi pi-ellipsis-v text-color-secondary" (click)="menu.toggle($event)"></i>
+                        <p-menu #menu [model]="items" [popup]="true" styleClass="preset-dropdown-wrapper" />
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="custom-table mb-3">
+    <p-table [value]="depositaccountlist" [columns]="selectedTableColumns" #liquidityDashboardTable [paginator]="true"
+        [rows]="10" [rowsPerPageOptions]="[10, 50, 100]" styleClass="scrollable-custom-table" [scrollable]="true"
+        scrollHeight="calc(100vh - 195px)"
+        [globalFilterFields]="['accountname', 'clientname', 'accountnumber', 'accounttype', 'accountstatus', 'Revenue Shared', 'accountbalance']">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th pFrozenColumn pSortableColumn="clientname" style="min-width:160px">
+                    <p-columnFilter type="text" field="clientname" display="menu" [showAddButton]="false"
+                        [showOperator]="false" />
+                        Client Name
+                    <p-sortIcon field="clientname" />
+                </th>
+                <ng-container *ngFor="let column of columns">
+                    <th [pSortableColumn]="column?.field" [pTooltip]="column?.tooltip" tooltipPosition="bottom">
+                        <p-columnFilter type="text" [field]="column?.field" display="menu" [showAddButton]="false"
+                            [showOperator]="false" />
+                            {{column.header}}
+                        <p-sortIcon [field]="column?.field" />
+                    </th>
+                </ng-container>
+                <th alignFrozen="right" pFrozenColumn class="text-center">Actions</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-liquidity let-columns="columns">
+            <tr>
+                <td pFrozenColumn style="min-width: 275px;">
+                    {{ liquidity.clientname }}
+                    <br/>
+                    <span class="text-color-secondary">{{ liquidity.secondaryclientname }} 
+                        <span *ngif="liquidity.isSecondaryClientExceed">+2</span></span> 
+                </td>
+                
+                <ng-container *ngFor="let column of columns">
+
+                    <!-- <td *ngIf="column.field === 'accountnumber'" style="min-width: 275px;">{{ liquidity.accountname }}</td> -->
+                    <td *ngIf="column.field === 'accountname'" style="min-width: 275px;">{{ liquidity.accountname }}</td>
+                    <td *ngIf="column.field === 'accountnumber'" style="min-width: 180px;">
+                        {{ liquidity.accountnumber }}
+                    </td>
+                    <td *ngIf="column.field === 'accounttype'" style="min-width: 180px;">
+                        {{ liquidity.accounttype }}
+                        <!-- <br/>
+                        <span class="text-color-secondary">{{ liquidity.addvisordetails }} </span> -->
+                    </td>
+                    <td *ngIf="column.field === 'accountstatus'" class="text-center"  style="min-width: 180px;">
+                        <span class="tag tag-success" *ngIf="liquidity.accountstatus == 'Open'">
+                            <p-tag value="Open" severity="success" />
+                        </span>
+                        <span *ngIf="liquidity.accountstatus == 'Awaiting Funding'">
+                            <p-tag value="Awaiting Funding" severity="danger" />
+                        </span>
+                        <span *ngIf="liquidity.accountstatus == 'Awaiting Signature'">
+                            <p-tag value="Awaiting Signature" severity="info" />
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'addvisordetails'" class="text-center"  style="min-width: 180px;">
+                        <span class="tag tag-success cursor-pointer" *ngIf="liquidity.addvisordetails == 'Yes'">
+                            <p-tag value="Yes" severity="success" />
+                        </span>
+                        <span *ngIf="liquidity.addvisordetails == 'No'">
+                            <p-tag value="No" severity="danger" />
+                        </span>
+                    </td>
+                    <td *ngIf="column.field === 'accountbalance'" class="text-right" style="min-width: 180px;">
+                        <span *ngIf="liquidity.isloading == true" class="text-right">
+                            <i class="pi pi-spin pi-spinner"></i>
+                            <span class="font-12 text-color-secondary" style="display: block;">Fetching Data..</span>
+                        </span>
+                        <span *ngIf="liquidity.isloading == false">
+                            {{ liquidity.accountbalance }}
+                            <span class="font-12 text-color-secondary" style="display: block;">{{liquidity.accbalanceasof}}</span>
+                        </span>
+                    </td>
+                </ng-container>
+                <td alignFrozen="right" pFrozenColumn style="min-width: 110px; border-left: 1px solid #E8EBF3;">
+                    <div class="card flex justify-content-center">
+                        <p-button icon="pi pi-eye" severity="primary" size="small" class="mr-1" tooltipPosition="top" pTooltip="View Details"
+                        [routerLink]="['/advisor-dashboard/deposit-accounts/account-holdings']" [outlined]="true"  />
+                        <!-- <p-button severity="primary" tooltipPosition="top" pTooltip="Edit" class="mr-1" icon="pi pi-pencil" size="small" [outlined]="true" /> -->
+                        <!-- <p-button icon="pi pi-comment" severity="secondary" size="small" class="mr-1" tooltipPosition="top" pTooltip="Comments" [outlined]="true"  /> -->
+
+                        <p-button icon="pi pi-clipboard" class="mr-1" tooltipPosition="top" pTooltip="Notes" [outlined]="true" (click)="this.showCommentsModal = true"/>
+                        <p-button severity="primary" tooltipPosition="top" pTooltip="Refresh Balance"  icon="pi pi-sync" size="small" [outlined]="true" />
+
+                    </div>
+                </td>
+                <!-- <td pFrozenColumn style="min-width: 275px;">{{ liquidity.accountname }}</td> -->
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+
+
+
+ <!-- Commnents -->
+ <p-dialog header="Notes" [(visible)]="showCommentsModal" [modal]="true" [styleClass]="'search-client'"
+ [breakpoints]="{ '500px': '100%' }" [style]="{ width: '500px' }" [draggable]="false"
+ [resizable]="false">
+
+    <div class="comment-input flex flex-grow-1 align-item-center justify-content-center p-3 gap-3">
+        <textarea rows="3" class="flex-grow-1" pInputTextarea placeholder="Enter Comment"></textarea>
+        <p-button label="Submit" />
+    </div>
+
+    <div class="comment-timeline card flex flex-wrap gap-6 p-3 custom-scrollbar">
+        <p-timeline [value]="advisorComments" class="w-full " align="left">
+            <ng-template pTemplate="content" let-comment>
+                <div class="flex flex-column pb-5">
+                    <span>{{ comment.comment }}</span>
+                    <span class="text-color-secondary font-14 mt-2">{{ comment.date }}</span>
+                </div>
+            </ng-template>
+        </p-timeline>
+    </div>
+    <div class="flex flex-grow-1 align-item-center justify-content-center py-3">
+        <p-button label="Close" (onClick)="showCommentsModal == false"/>
+    </div>
+</p-dialog>

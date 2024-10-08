@@ -1,0 +1,63 @@
+// .btn-file-upload::file-selector-button {
+//     // font-weight: bold;
+//     color: #2B3674;
+//     padding: 0.5em;
+//     border: none;
+//     border-right: 1px solid #dee2f3;
+//     border-radius: 0;
+//     font-size: 14px;
+//     margin-right: 5px;
+//     font-family: 'Nunito';
+//   }
+//   .btn-file-upload{
+//     font-size: 14px;
+//     font-family: 'Nunito';
+//   }
+
+
+.action-link{
+    color: #67779d;
+}
+.check-icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.2rem
+}
+.agreement-box{
+    &.unchecked{
+        opacity: 0.6;
+        background: #f8f8f8;
+    }
+    &.checked{
+        opacity: 1;
+        background: #ffffff;
+    }
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    .btn {
+        border: 1px solid #67789e;
+        color: #6a7ba0;
+        background-color: white;
+        padding: 5px 8px;
+        border-radius: 3px;
+        i{
+            float: left;
+            font-size: 14px;
+        }
+    }
+    input[type=file] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 32px;
+        height: 26px;
+    }
+}
+  

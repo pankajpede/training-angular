@@ -1,0 +1,768 @@
+<h3 class="text-primary">Dashboard</h3>
+
+<!-- <div class="mt-5">
+    <p-button label="Start Application" [routerLink]="['/advisor-dashboard/create-new-account-customer]" />
+    <p-button label="Start Application" />
+</div> -->
+
+
+<div class="flex flex-grow-1 align-items-top justify-content-center gap-3 mb-3">
+    <div style="width: 425px;">
+        <p-card class="create-account-card flex-1 flex-grow-1 text-center" >
+            <img src="./assets/images/illustrations/create-account.svg" height="80px"/>
+            <p class="text-color-primary mt-3 font-18 mb-3">Welcome to your Liquidity Dashboard</p>
+            <!-- <p class="text-color-secondary mt-3 font-14">Use this Dashboard to obtain a view of your practice.</p> -->
+            <p class="text-color-secondary mt-1 font-14 mb-4">Understand the Liquidity of your client or open a new account</p>
+            <p-button  icon="pi pi-plus" label="Create New Account"  [routerLink]="['/advisor-dashboard/create-new-account']"/>
+        </p-card>
+    </div>
+
+    <div class="flex flex-grow-1 align-items-top justify-content-start">
+        <p-card class="custom-card flex-1 flex-grow-1 flex-column text-center">
+            <div class="card-header">
+                <div class="content flex-1 flex">
+                    
+                    <div class="card w-full">
+                        <div class="top-action-wrapper flex align-items-center justify-content-between flex-wrap-end mb-3">
+                            <div class="title flex-1 flex justify-content-start font-18 font-semibold gap-2 text-primary">
+                                <!-- <p-badge [value]="accountopeningtrackerCount" />  -->
+                                Account Opening Tracker
+                            </div>
+                            <div class="page-actions float-right text-left">
+                                <!-- <p-button label="View More" size="small"  /> -->
+                                    <!-- <p-dropdown 
+                                    [options]="trackerSelection" [(ngModel)]="
+                                    " [checkmark]="false" 
+                                    optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown customdropdown-width'" class="mr-1" /> -->
+                                <p-dropdown 
+                                [options]="trackerType" [(ngModel)]="selectedTrackerType" [checkmark]="false" 
+                                optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown customdropdown-width'" class="mr-1" 
+                                (onChange)="trackerTypeChange()"/>
+                            </div>
+                        </div>
+                        
+                        <div class="content-wrapper list-scrollbar custom-scrollbar">
+
+                            <table *ngIf="trackerTypeCustomer">
+                                <thead>
+                                    <tr class="client-list-wrapper">
+                                        <th>&nbsp;</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Account Type</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Primary Holder</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Secondary Holder</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Email Customization</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="client-list-wrapper" *ngFor="let accountopeningtrackerlist of accountopeningtrackerlist">
+                                        <td>
+                                            <div class="client-name flex align-items-center justify-content-start font-14 pr-3">
+                                                <span class="right-arrow" *ngIf="accountopeningtrackerlist.delaystatus == 'yes' "></span>
+                                                <div class="flex flex-grow-1 flex-column justify-content-start" [ngClass]="accountopeningtrackerlist.delaystatus == 'yes' ? 'padding-adjust' : ''">
+                                                    <span class="name-field text-overflow-ellipsis pr-3 text-left">
+                                                        <i class="acc-type pi pi-user" tooltipPosition="top" pTooltip="Individual Account"></i>
+                                                        {{accountopeningtrackerlist.clientname}}
+                                                    </span>
+                                                    <span class="text-overflow-ellipsis pr-3 font-12 text-color-secondary text-left" *ngIf="accountopeningtrackerlist.delaystatus == 'yes' ">
+                                                        {{accountopeningtrackerlist.timeelapsed}} Days since start date
+                                                    </span>
+                                                </div>
+                                                <div class="actions flex gap-2 align-items-center justify-content-start relative">
+                                                    <i class="menu-toggler pi pi-ellipsis-v text-color-secondary font-14"></i>
+                                                    <ul class="menu-wrapper">
+                                                        <li class="flex align-items-center gap-2 cursor-pointer">
+                                                            <i class="pi pi-eye text-color-secondary font-14"></i>
+                                                            <span>View Details</span>
+                                                        </li>
+                                                        <li class="flex align-items-center gap-2 cursor-pointer">
+                                                            <i class="pi pi-envelope text-color-secondary font-14"></i>
+                                                            <span>Send Email</span>
+                                                        </li>
+                                                        <li class="flex align-items-center gap-2 cursor-pointer" (click)="showCommentsModal = true">
+                                                            <i class="pi pi-clipboard text-color-secondary font-14"></i>
+                                                            <span>Notes</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step1 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step1 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step1 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step2 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step2 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step2 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step3 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step3 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step3 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step4 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step4 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step4 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+
+                            <table *ngIf="!trackerTypeCustomer">
+                                <thead>
+                                    <tr class="client-list-wrapper">
+                                        <th>&nbsp;</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Bank Agreements</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Advisors Agreements</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Personal Details</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Additional Information</th>
+                                        <th class="text-wrapper font-12 text-color-secondary">Open Account</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="client-list-wrapper" *ngFor="let accountopeningtrackerlist of accountopeningtrackerlist">
+                                        <td>
+                                            <div class="client-name flex align-items-center justify-content-start font-14 pr-3">
+                                                <span class="right-arrow" *ngIf="accountopeningtrackerlist.delaystatus == 'yes' "></span>
+                                                <div class="flex flex-grow-1 flex-column justify-content-start" [ngClass]="accountopeningtrackerlist.delaystatus == 'yes' ? 'padding-adjust' : ''">
+                                                    <span class="name-field text-overflow-ellipsis pr-3 text-left">
+                                                        <i class="acc-type pi pi-user" tooltipPosition="top" pTooltip="Individual Account"></i>
+                                                        {{accountopeningtrackerlist.clientname}}
+                                                    </span>
+                                                    <span class="text-overflow-ellipsis pr-3 font-12 text-color-secondary text-left" *ngIf="accountopeningtrackerlist.delaystatus == 'yes' ">
+                                                        {{accountopeningtrackerlist.timeelapsed}} Days since start date
+                                                    </span>
+                                                </div>
+                                                <div class="actions flex gap-2 align-items-center justify-content-start relative">
+                                                    <i class="menu-toggler pi pi-ellipsis-v text-color-secondary font-14"></i>
+                                                    <ul class="menu-wrapper">
+                                                        <li class="flex align-items-center gap-2">
+                                                            <i class="pi pi-eye text-color-secondary font-14"></i>
+                                                            <span>View Details</span>
+                                                        </li>
+                                                        <li class="flex align-items-center gap-2">
+                                                            <i class="pi pi-envelope text-color-secondary font-14"></i>
+                                                            <span>Send Email</span>
+                                                        </li>
+                                                        <li class="flex align-items-center gap-2">
+                                                            <i class="pi pi-phone text-color-secondary font-14"></i>
+                                                            <span>Call Now</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step1 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step1 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step1 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step2 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step2 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step2 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step3 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step3 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step3 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step4 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step4 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step4 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td class="progress-steps-wrapper">
+                                            <div class="check-mark">
+                                                <span class="icon-wrapper completed" *ngIf="accountopeningtrackerlist.step5 == 'completed'">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper failed" *ngIf="accountopeningtrackerlist.step5 == 'failed'"
+                                                tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i>
+                                                </span>
+                                                <span class="icon-wrapper pending" *ngIf="accountopeningtrackerlist.step5 == 'pending'">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- <div class="client-list-wrapper flex flex-grow-1 text-left">
+                                <div class="client-name flex align-items-center justify-content-between font-14 pr-3" style="width: 332px;">
+                                   &nbsp;
+                                </div>
+                                <ul class="progress-steps-wrapper flex flex-grow-1 pt-2">
+                                    <li class="flex-1 align-items-center justify-content-center mb-2">
+                                        <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                            <span class="text-wrapper font-12">Account Type</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex-1 align-items-center justify-content-center mb-2">
+                                        <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                            <span class="text-wrapper font-12">Primary Holder</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex-1 align-items-center justify-content-center mb-2">
+                                        <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                            <span class="text-wrapper font-12">Secondary Holder</span>
+                                        </div>
+                                    </li>
+                                    <li class="flex-1 align-items-center justify-content-center mb-2">
+                                        <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                            <span class="text-wrapper font-12">Email Customization</span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> -->
+                            <!-- <div class="list-scrollbar custom-scrollbar">
+                                <div class="client-list-wrapper flex flex-grow-1 text-left py-2" *ngFor="let accountopeningtrackerlist of accountopeningtrackerlist">
+                                    <div class="client-name flex align-items-center justify-content-between font-14 pr-3">
+                                        <span class="right-arrow" *ngIf="accountopeningtrackerlist.delaystatus == 'yes' "></span>
+                                        <div class="flex flex-grow-1 flex-column" [ngClass]="accountopeningtrackerlist.delaystatus == 'yes' ? 'padding-adjust' : ''">
+                                            <span class="name-field text-overflow-ellipsis pr-3">
+                                                <i class="acc-type pi pi-user" tooltipPosition="top" pTooltip="Individual Account"></i>
+                                                {{accountopeningtrackerlist.clientname}}
+                                            </span>
+                                            <span class="text-overflow-ellipsis pr-3 font-12 text-color-secondary" *ngIf="accountopeningtrackerlist.delaystatus == 'yes' ">
+                                                {{accountopeningtrackerlist.timeelapsed}} Days since start date
+                                            </span>
+                                        </div>
+                                        <div class="actions flex gap-2 align-items-center relative">
+                                            <i class="menu-toggler pi pi-ellipsis-v text-color-secondary font-14"></i>
+                                            <ul class="menu-wrapper">
+                                                <li class="flex align-items-center gap-2">
+                                                    <i class="pi pi-eye text-color-secondary font-14"></i>
+                                                    <span>View Details</span>
+                                                </li>
+                                                <li class="flex align-items-center gap-2">
+                                                    <i class="pi pi-envelope text-color-secondary font-14"></i>
+                                                    <span>Send Email</span>
+                                                </li>
+                                                <li class="flex align-items-center gap-2">
+                                                    <i class="pi pi-phone text-color-secondary font-14"></i>
+                                                    <span>Call Now</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <ul class="progress-steps-wrapper flex flex-grow-1 p-3" *ngIf="accountopeningtrackerlist.progress == 1">
+                                        <li class="flex-1 align-items-center justify-content-center cursor-pointer">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Account Type</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Primary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Secondary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Email Customization</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul class="progress-steps-wrapper flex flex-grow-1 p-3" *ngIf="accountopeningtrackerlist.progress == 2">
+                                        <li class="flex-1 align-items-center justify-content-center cursor-pointer">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Account Type</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper failed" tooltipPosition="top" pTooltip="Automated review">
+                                                    <i class="pi pi-times font-12"></i> 
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Primary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Secondary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Email Customization</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul class="progress-steps-wrapper flex flex-grow-1 p-3" *ngIf="accountopeningtrackerlist.progress == 3">
+                                        <li class="flex-1 align-items-center justify-content-center cursor-pointer">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Account Type</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Primary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Secondary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper">
+                                                    <i class="pi pi-spinner-dotted font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Email Customization</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul class="progress-steps-wrapper flex flex-grow-1 p-3" *ngIf="accountopeningtrackerlist.progress == 4">
+                                        <li class="flex-1 align-items-center justify-content-center cursor-pointer">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Account Type</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Primary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Secondary Holder</span>
+                                            </div>
+                                        </li>
+                                        <li class="flex-1 flex-column align-items-center justify-content-center">
+                                            <div class="flex flex-column align-items-center justify-content-center gap-1">
+                                                <span class="icon-wrapper completed">
+                                                    <i class="pi pi-check font-12"></i>
+                                                </span>
+                                                <span class="text-wrapper font-12 text-color-secondary">Email Customization</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div> -->
+                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-card>
+    </div>
+
+    <div class="account-overview-wrapper flex flex-column bg-white" style="width: 300px;border: 1px solid #e8ebf3;">
+        <div class="custom-card-header flex flex-column justify-content-end align-items-center px-3 py-2">
+            <span class="font-16 font-semibold text-primary w-full">Current Liquidity Rates</span>
+            <span class="font-14 text-color-secondary w-full">As of Sep 3, 2024</span>
+            <!-- <div class="search-wrapper">
+                <p-iconField class="mr-1" class="search-wrapper" iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                    <input type="text" pInputText placeholder="Search" #searchTable />
+                </p-iconField>
+            </div> -->
+        </div>
+
+        <ul class="account-overview-list w-full custom-scrollbar">
+            <li class="flex align-items-center justify-content-start gap-2">
+                <div class="detail-wrapper flex flex-1 flex-column">
+                    <span class="client-name font-14">Effective Fund Rate</span>
+                </div>
+                <span class="font-12">&#64;</span>
+                <span class="name-initial font-14">5.3%</span>
+            </li>
+            <li class="flex align-items-center justify-content-start gap-2">
+                <div class="detail-wrapper flex flex-1 flex-column">
+                    <span class="client-name font-14">SOFR</span>
+                </div>
+                <span class="font-12">&#64;</span>
+                <span class="name-initial font-14">4.8%</span>
+            </li>
+            <li class="flex align-items-center justify-content-start gap-2">
+                <div class="detail-wrapper flex flex-1 flex-column">
+                    <span class="client-name font-14">30 - Day Average SOFR</span>
+                </div>
+                <span class="font-12">&#64;</span>
+                <span class="name-initial font-14">4.9%</span>
+            </li>
+            <li class="flex align-items-center justify-content-start gap-2">
+                <div class="detail-wrapper flex flex-1 flex-column">
+                    <span class="client-name font-14">90 - Day Average SOFR</span>
+                </div>
+                <span class="font-12">&#64;</span>
+                <span class="name-initial font-14">5.0%</span>
+            </li>
+            <li class="flex align-items-center justify-content-start gap-2">
+                <div class="detail-wrapper flex flex-1 flex-column">
+                    <span class="client-name font-14">180 - Day Average SOFR</span>
+                </div>
+                <span class="font-12">&#64;</span>
+                <span class="name-initial font-14">5.2%</span>
+            </li>
+        </ul>
+    </div>
+    <!-- <div class="liquidity-widget account-overview-wrapper flex flex-column h-auto" style="max-width: 350px;background: #fff;">
+        <ul class="account-overview-list w-full h-auto">
+            <div class="custom-table no-border mb-3">
+                <p-table [value]="LiquidityRates" [columns]="LiquidityRatesColumns"
+                    #LiquidityRatesTable styleClass="scrollable-custom-table" [scrollable]="true" styleClass="scrollable-dashboard-table">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <ng-container *ngFor="let column of columns">
+                                <th [pSortableColumn]="column?.field" >
+                                    {{column.header}}
+                                </th>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                        <tr>
+                            <ng-container *ngFor="let column of columns">
+                                <td *ngIf="column.field === 'liqidityname'" style="width:275px">
+                                    {{ liquidity.liqidityname}}
+                                </td>
+                                <td *ngIf="column.field === 'rate'" style="width:155px">
+                                    {{ liquidity.rate}}
+                                </td>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </ul>
+    </div> -->
+</div>
+
+<div class="product-card flex flex-grow-1 align-items-top justify-content-start mb-3">
+    <p-card class="custom-card flex-1 flex-grow-1 flex-column text-center">
+        <div class="card-header">
+            <div class="content flex-1 flex">
+                
+                <div class="card w-full">
+                    <div class="top-action-wrapper flex align-items-center justify-content-between flex-wrap-end">
+                        <div class="title flex-1 flex justify-content-start font-18 font-semibold gap-2 text-primary">
+                            HYSA Account Overview 
+                        </div>
+                        <!-- <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+                            <p-button label="View More" size="small"  />
+                        </div> -->
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="flex flex-grow-1 flex-column">
+
+                            <div class="flex flex-grow-1">
+                                <ul class="card-stat flex flex-grow-1 align-items-center justify-content-center">
+                                    <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                        <span class="title font-14 text-color-secondary">Total Balance</span>
+                                        <span class="value font-semibold font-16">$1,250,000</span>
+                                    </li>
+                                    <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                        <span class="title font-14 text-color-secondary">Average Balance</span>
+                                        <span class="value font-semibold font-16">$83,333</span>
+                                    </li>
+                                    <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                        <span class="title font-14 text-color-secondary">Interest Earned</span>
+                                        <span class="value font-semibold font-16">$7,500</span>
+                                    </li>
+                                    <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                        <span class="title font-14 text-color-secondary">Number of Accounts</span>
+                                        <span class="value font-semibold font-16">7</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex align-items-center justify-content-center gap-3">
+                                <div class="flex-1 flex align-items-center justify-content-center " style="min-width: 300px;">
+                                    <div id="accountSummaryChart" style="height:350px;width: 300px; float:left"></div>
+                                </div>
+                                <div class="flex-1 flex align-items-center justify-content-center ">
+                                    <div id="stackedBarChart" style="height:350px;width: 500px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="account-overview-wrapper flex flex-column" style="max-width: 300px;">
+                            <div class="custom-card-header flex justify-content-between align-items-center">
+                                <span class="font-16 font-semibold">Clients</span>
+                                <div class="search-wrapper">
+                                    <p-iconField class="mr-1" class="search-wrapper customdropdown-width titleDropdown" iconPosition="left">
+                                        <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem"/>
+                                        <input type="text" pInputText placeholder="Search" #searchTable  style="width: 125px;"/>
+                                    </p-iconField>
+                                </div>
+
+                            </div>
+                            <ul class="account-overview-list w-full custom-scrollbar">
+                                <li class="flex align-items-center justify-content-start gap-3 mb-2" *ngFor="let HysaAccountOverviewlist of HysaAccountOverviewlist">
+                                    <span class="name-initial">{{HysaAccountOverviewlist.nameinitial}}</span>
+                                    <div class="detail-wrapper flex flex-1 flex-column">
+                                        <span class="client-name font-semibold font-14">{{HysaAccountOverviewlist.clientname}}</span>
+                                        <span class="balance text-color-secondary">
+                                            {{HysaAccountOverviewlist.accountbalance  | currency: 'USD' }}
+                                            <span class="balance text-color-secondary font-italic font-12">(&#64;{{HysaAccountOverviewlist.interestrate}})</span>
+                                        </span>
+                                        
+                                    </div>
+                                    <div class="icon-wrapper flex gap-2">
+                                        <i class="pi pi-send text-color-secondary font-16" tooltipPosition="top" pTooltip="Withdraw Cash"></i>
+                                        <i class="pi pi-plus-circle text-color-secondary font-16" tooltipPosition="top" pTooltip="Add Cash"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-card>
+</div>
+
+
+<div class="product-card flex flex-grow-1 align-items-top justify-content-start mb-3">
+    <p-card class="custom-card flex-1 flex-grow-1 flex-column text-center">
+        <div class="card-header">
+            <div class="content flex-1 flex">
+                
+                <div class="card w-full">
+                    <div class="top-action-wrapper flex align-items-center justify-content-between flex-wrap-end">
+                        <div class="title flex-1 flex justify-content-start font-18 font-semibold gap-2 text-primary">
+                           HYSA Cash Flow Summary 
+                        </div>
+                        <!-- <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+                            <p-button label="View More" size="small"  />
+                        </div> -->
+                    </div>
+                    <div class="flex gap-5">
+                        <div class="flex flex-grow-1" style="max-width: 200px;">
+                            <ul class="card-stat flex flex-column align-items-center justify-content-center">
+                                <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                    <span class="title font-14 font-semibold">Inflows</span>
+                                    <span class="value">$1,000,000</span>
+                                </li>
+                                <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                    <span class="title font-14 font-semibold">Outflows</span>
+                                    <span class="value">$250,000</span>
+                                </li>
+                                <li class="flex flex-column align-items-center justify-content-center gap-1">
+                                    <span class="title font-14 font-semibold">Net Cash Flow</span>
+                                    <span class="value">$1,250,000</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-grow-1 align-items-center justify-content-center">
+                            <div id="cashFlowSummary" style="height:300px; width: 700px"></div>
+                        </div>
+                        <div class="account-overview-wrapper flex flex-column" style="max-width: 300px;">
+                            <div class="custom-card-header flex justify-content-between align-items-center">
+                                <span class="font-16 font-semibold">Transactions</span>
+                                <!-- <div class="search-wrapper">
+                                    <p-iconField class="mr-1" class="search-wrapper customdropdown-width titleDropdown" iconPosition="left">
+                                        <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem"/>
+                                        <input type="text" pInputText placeholder="Search" #searchTable  style="width: 125px;"/>
+                                    </p-iconField>
+                                </div> -->
+                                <div class="float-right text-left">
+                                    <p-dropdown 
+                                    [options]="transactonType" [(ngModel)]="selectedTransactonType" [checkmark]="false" 
+                                    optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown customdropdown-width'" />
+                                </div>
+                            </div>
+                            <ul class="account-overview-list w-full custom-scrollbar">
+                                <li class="flex align-items-center justify-content-start gap-3 mb-2" *ngFor="let transactionlist of transactionlist">
+                                    <!-- <span class="name-initial">{{transactionlist.clientname}}</span> -->
+                                    <div class="detail-wrapper flex flex-1 flex-column">
+                                        <!-- <span class="balance text-color-secondary">
+                                            {{transactionlist.transactiontype }}
+                                        </span> -->
+                                        <!-- <p-tag severity="secondary" value="{{transactionlist.transactiontype}}" [rounded]="true" /> -->
+                                        <span class="flex flex-1 justify-content-between align-items-center">
+                                            <span class="flex flex-column">
+                                                <span class="client-name font-semibold font-14 text-truncate">{{transactionlist.clientname }}</span>
+                                                <span class="font-12 text-color-secondary">{{transactionlist.accnumber }}</span>
+                                                <span class="font-12 text-color-secondary">{{transactionlist.date}}</span>  
+                                            </span>
+                                            <span class="balance flex flex-column">
+                                                <span class="client-name font-semibold font-14">{{transactionlist.ammount  | currency: 'USD' }}</span>
+                                            </span>
+                                            <div class="icon-wrapper flex gap-2">
+                                                <i class="pi pi-eye text-color-secondary font-16" tooltipPosition="top" pTooltip="View Details"></i>
+                                            </div>
+                                        </span>
+                                        <!-- <span class="balance flex flex-column text-color-secondary font-14">
+                                        </span> -->
+                                        
+                                    </div>
+                                    <!-- <div class="icon-wrapper flex gap-2">
+                                        <i class="pi pi-send text-color-secondary font-16" tooltipPosition="top" pTooltip="Withdraw Cash"></i>
+                                        <i class="pi pi-plus-circle text-color-secondary font-16" tooltipPosition="top" pTooltip="Add Cash"></i>
+                                    </div> -->
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-card>
+</div>
+<div class="card">
+    <p-carousel 
+        [circular]="false" 
+        orientation="horizontal" 
+        [responsiveOptions]="carouselOptions"
+        [numVisible]="3" [numScroll]="3" [circular]="false" >
+        <ng-template pTemplate="header">
+            <p>Header content</p>
+        </ng-template>
+
+        <ng-template pTemplate="item">
+            <div>Hello</div>
+        </ng-template>
+        
+        <ng-template pTemplate="footer">
+            <p>Footer content</p>
+        </ng-template>
+    </p-carousel>
+</div>
+
+
+ <!-- Commnents -->
+ <p-dialog header="Notes" [(visible)]="showCommentsModal" [modal]="true" [styleClass]="'search-client'"
+ [breakpoints]="{ '500px': '100%' }" [style]="{ width: '500px' }" [draggable]="false"
+ [resizable]="false">
+
+    <div class="comment-input flex flex-grow-1 align-item-center justify-content-center p-3 gap-3">
+        <textarea rows="3" class="flex-grow-1" pInputTextarea placeholder="Enter Comment"></textarea>
+        <p-button label="Submit" />
+    </div>
+
+    <div class="comment-timeline card flex flex-wrap gap-6 p-3 custom-scrollbar">
+        <p-timeline [value]="advisorComments" class="w-full " align="left">
+            <ng-template pTemplate="content" let-comment>
+                <div class="flex flex-column pb-5">
+                    <span>{{ comment.comment }}</span>
+                    <span class="text-color-secondary font-14 mt-2">{{ comment.date }}</span>
+                </div>
+            </ng-template>
+        </p-timeline>
+    </div>
+    <div class="flex flex-grow-1 align-item-center justify-content-center py-3">
+        <p-button label="Close" (onClick)="showCommentsModal == false"/>
+    </div>
+</p-dialog>

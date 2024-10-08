@@ -1,0 +1,45 @@
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+html, body, div, span, object, iframe, figure, p, blockquote, pre, a, code, em, img, small, strike, strong, sub, sup, tt, b, u, i, ol, ul, li, fieldset, form, label, table, caption, tbody, tfoot, thead, tr, th, td, main, canvas, embed, footer, header, nav, section, video{
+  font-family: 'Nunito';
+  font-weight: 300;
+}
+input{
+  font-size: 14px;
+  font-weight: 300;
+  border: 1px solid #dee2f3;
+  &::placeholder{
+    color: #A3AED0;
+  }
+}
+input:focus{
+  box-shadow: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 300;
+}
+strong{
+  font-weight: 600;
+}
+label {
+  // font-weight: 600;
+  font-size: 14px;
+  // margin-bottom: 3px;
+}
+input, label{
+  color: #2B3674;
+}

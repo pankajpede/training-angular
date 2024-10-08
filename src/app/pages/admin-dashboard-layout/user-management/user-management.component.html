@@ -1,0 +1,339 @@
+<!-- Toast for messages -->
+<p-toast />
+<!-- Confirmation Dialog -->
+<p-confirmDialog />
+
+<div class="flex justify-content-between flex-wrap mb-2">
+  <div class="flex align-items-center justify-content-center">
+    <div class="page-title float-left">
+      <div class="breadcrum float-left w-100">
+        <a class="text-muted"><i class="pi pi-home float-left font-16"></i></a>
+        <span class="mx-2 float-left text-muted font-18">/</span>
+        <a class="text-muted font-14 text-medium">User Management</a>
+      </div>
+      <div class="page-heading float-left w-100">
+        <span class="font-18 font-semibold text-primary">Users Management</span>
+      </div>
+    </div>
+  </div>
+  <div
+    class="top-action-wrapper flex align-items-center justify-content-center"
+  >
+    <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+      <p-button
+        icon="pi pi-user-plus"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Create New User"
+        (click)="toggleUserDialog('create')"
+        onkeydown="toggleUserDialog('create')"
+      />
+      <p-divider layout="vertical" />
+      <p-button
+        icon="pi pi-file-excel"
+        tooltipPosition="top"
+        pTooltip="Export To Excel"
+        (click)="userManagementTableRef.exportCSV()"
+        onkeydown="userManagementTableRef.exportCSV()"
+      />
+      <p-button
+        icon="pi pi-table"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Column Selection"
+        (click)="coloumnSelection.toggle($event)"
+        onkeydown="coloumnSelection.toggle($event)"
+      />
+      <p-overlayPanel #coloumnSelection>
+        <div *ngFor="let tableColoumn of tableColumns" class="field-checkbox">
+          <p-checkbox
+            [label]="tableColoumn?.header"
+            name="header"
+            [value]="tableColoumn"
+          ></p-checkbox>
+        </div>
+      </p-overlayPanel>
+
+      <p-button
+        class="search-icon"
+        [ngClass]="
+          isSearchInputVisible ? 'search-expanded' : 'search-collapsed'
+        "
+        [icon]="'pi pi ' + (isSearchInputVisible ? 'pi-times' : 'pi-search')"
+        class="mr-1"
+        tooltipPosition="top"
+        pTooltip="Search"
+        (onClick)="toggleSearchInput()"
+      />
+      <p-iconField
+        class="search-wrapper"
+        iconPosition="left"
+        *ngIf="isSearchInputVisible"
+      >
+        <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+        <input
+          type="text"
+          pInputText
+          placeholder="Search"
+          #searchTable
+          (input)="
+            userManagementTableRef.filterGlobal(searchTable.value, 'contains')
+          "
+        />
+      </p-iconField>
+    </div>
+  </div>
+</div>
+
+<div class="custom-table">
+  <p-table
+    [columns]="selectedTableColumns"
+    [value]="usersList"
+    #userManagementTableRef
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 50, 100]"
+    styleClass="scrollable-custom-table"
+    [scrollable]="true"
+    scrollHeight="calc(100vh - 270px)"
+    [globalFilterFields]="['firstName', 'lastName', 'email', 'phone']"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let column of columns">
+          <th
+            [pSortableColumn]="column?.field"
+            [pTooltip]="column?.tooltip"
+            tooltipPosition="bottom"
+          >
+            <p-columnFilter
+              type="text"
+              [field]="column?.field"
+              display="menu"
+              [showAddButton]="false"
+              [showOperator]="false"
+            />
+            {{ column.header }}
+            <p-sortIcon [field]="column?.field" />
+          </th>
+        </ng-container>
+        <th alignFrozen="right" pFrozenColumn class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user let-columns="columns">
+      <tr>
+        <ng-container *ngFor="let column of columns">
+          <td *ngIf="column.field === 'firstName'">
+            {{ user.firstName }}
+          </td>
+          <td *ngIf="column.field === 'lastName'">
+            {{ user.lastName }}
+          </td>
+          <td *ngIf="column.field === 'email'">
+            {{ user.email }}
+          </td>
+          <td *ngIf="column.field === 'phone'">
+            {{ user.phone }}
+          </td>
+          <td *ngIf="column.field === 'lastLoggedIn'">
+            {{ user.lastLoggedIn }}
+          </td>
+        </ng-container>
+        <td
+          alignFrozen="right"
+          pFrozenColumn
+          style="width: 100px; border-left: 1px solid #e8ebf3"
+        >
+          <div class="card gap-2 flex justify-content-center">
+            <p-button
+              severity="primary"
+              tooltipPosition="top"
+              class="mr-1"
+              pTooltip="Edit User"
+              icon="pi pi-pencil"
+              size="small"
+              [outlined]="true"
+              (click)="this.selectedUser = user; toggleUserDialog('edit')"
+              onkeydown="toggleUserDialog('edit')"
+            />
+            <p-button
+              severity="primary"
+              tooltipPosition="top"
+              class="mr-1"
+              pTooltip="Reset Password"
+              icon="pi pi-lock"
+              size="small"
+              [outlined]="true"
+              (click)="onConfirmResetPassword($event)"
+              onkeydown="onConfirmResetPassword($event)"
+            />
+            <p-inputSwitch
+              [pTooltip]="user.isActive ? 'Active' : 'Inactive'"
+              tooltipPosition="top"
+              [(ngModel)]="user.isActive"
+            />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Create Update user Dialog -->
+<p-dialog
+  [visible]="isUserDialogVisible"
+  [header]="userDialogMode === 'create' ? 'Create User' : 'Update User'"
+  [draggable]="false"
+  [modal]="true"
+  [resizable]="false"
+  (visibleChange)="onVisibleChange($event)"
+  [style]="{
+    width: '100%',
+    maxWidth: '600px'
+  }"
+>
+  <form class="grid" [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="col-12">
+      <div class="flex flex-column gap-2">
+        <label for="email">Email</label>
+        <p-autoComplete
+          appendTo="body"
+          formControlName="email"
+          optionValue="email"
+          [suggestions]="userSuggestions"
+          (completeMethod)="searchUsers($event)"
+          [optionLabel]="getOptionLabel()"
+          class="w-full"
+          inputStyleClass="w-full"
+          styleClass="w-full"
+        >
+          <ng-template let-user pTemplate="item">
+            {{ user.email }}
+          </ng-template>
+        </p-autoComplete>
+        <div
+          *ngIf="formControls['email'].invalid && formControls['email'].touched"
+        >
+          <small
+            class="text-red-500"
+            *ngIf="formControls['email'].errors?.['required']"
+          >
+            Email is required
+          </small>
+
+          <small
+            class="text-red-500"
+            *ngIf="formControls['email'].errors?.['email']"
+          >
+            Please enter a valid email
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column gap-2">
+        <label for="firstName">First Name</label>
+        <input
+          type="text"
+          pInputText
+          class="w-full"
+          formControlName="firstName"
+        />
+        <div
+          *ngIf="
+            formControls['firstName'].invalid &&
+            formControls['firstName'].touched
+          "
+        >
+          <small
+            class="text-red-500"
+            *ngIf="formControls['firstName'].errors?.['required']"
+          >
+            First Name is required
+          </small>
+          <small
+            class="text-red-500"
+            *ngIf="formControls['firstName'].errors?.['minlength']"
+          >
+            First Name must be at least 2 characters long
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column gap-2">
+        <label for="lastName">Last Name</label>
+        <input
+          type="text"
+          pInputText
+          class="w-full"
+          formControlName="lastName"
+        />
+        <div
+          *ngIf="
+            formControls['lastName'].invalid && formControls['lastName'].touched
+          "
+        >
+          <small
+            class="text-red-500"
+            *ngIf="formControls['lastName'].errors?.['required']"
+          >
+            Last Name is required
+          </small>
+          <small
+            class="text-red-500"
+            *ngIf="formControls['lastName'].errors?.['minlength']"
+          >
+            Last Name must be at least 2 characters long
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column gap-2">
+        <label for="phone">Phone</label>
+        <p-inputMask
+          mask="(999) 999-9999"
+          formControlName="phone"
+          placeholder="(999) 999-9999"
+          class="w-full"
+        />
+        <div
+          *ngIf="formControls['phone'].invalid && formControls['phone'].touched"
+        >
+          <small
+            class="text-red-500"
+            *ngIf="formControls['phone'].errors?.['required']"
+          >
+            Phone is required
+          </small>
+
+          <small
+            class="text-red-500"
+            *ngIf="formControls['phone'].errors?.['pattern']"
+          >
+            Please enter a valid phone number
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex gap-4 justify-content-end">
+        <p-button
+          label="Cancel"
+          severity="danger"
+          text
+          (onClick)="onCancel()"
+        />
+        <p-button
+          [label]="userDialogMode === 'create' ? 'Create' : 'Update'"
+          [disabled]="!userForm.valid"
+          [text]="!userForm.valid"
+          severity="primary"
+          (onClick)="onSubmit()"
+        />
+      </div>
+    </div>
+  </form>
+</p-dialog>

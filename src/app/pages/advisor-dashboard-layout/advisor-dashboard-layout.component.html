@@ -1,0 +1,19 @@
+<app-header></app-header>
+<app-advisor-sidebar></app-advisor-sidebar>
+
+<div class="px-3" [ngStyle]="{ marginTop: '60px', marginLeft: '65px' }">
+  <div class="loader" *ngIf="loaderService.isLoading$ | async">
+    <div class="fispoke-logo">
+      <span class="outer-blue">
+        <span class="inner-blue"></span>
+        <span class="inner-lines">
+          <span class="line line1"></span>
+          <span class="line line2"></span>
+          <span class="line line3"></span>
+        </span>
+      </span>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</div>

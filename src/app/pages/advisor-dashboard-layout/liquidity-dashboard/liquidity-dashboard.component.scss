@@ -1,0 +1,26 @@
+.pi-star-fill, .pi-star-fill{
+    color: #F2BD00;
+}
+
+
+.tier-table{
+    width: 100%;
+    th{
+        background-color: #01205F;
+        color: #fff;
+        font-size: 14px;
+        // text-align: center;
+        padding: 10px;
+    }
+    td{
+        font-size: 14px;
+        // text-align: center;
+        padding: 7px;
+        border: 1px solid #E8EBF3;
+        border-top: 0;
+        border-left: 0;
+        &:first-child{
+            border-left: 1px solid #E8EBF3;
+        }
+    }
+}

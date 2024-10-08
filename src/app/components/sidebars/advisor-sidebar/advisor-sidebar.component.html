@@ -1,0 +1,83 @@
+<!-- <div class="fixed bottom-0 left-0 bg-primary" [ngStyle]="{top: '60px', width: '65px'}">
+    <div class="flex flex-column py-2">
+        <app-menu-item icon="pi pi-chart-pie"></app-menu-item>
+        <app-menu-item icon="pi pi-shopping-cart"></app-menu-item>
+        <app-menu-item icon="pi pi-user"></app-menu-item>
+    </div>
+</div> -->
+
+
+
+<div class="sidebar-custom-navbar bg-primary">
+    <!-- <div class="mobile-menu-header float-left w-100 border-bottom mobile-show">
+       <a class="navbar-brand mobile-show" id="home">
+          <img src="./assets/images/logo.jpg" alt="logo" style="width:40px" />
+       </a>
+       <span class="float-right" (click)="toogleSideBar()"><i class="icon icon-cross"></i></span>
+       <button class="navbar-toggler mobile-show" type="button" data-toggle="collapse" (click)="navbarOpen = !navbarOpen"
+          aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="navbar-toggler-icon icon-bar"></span>
+          <span class="navbar-toggler-icon icon-bar"></span>
+          <span class="navbar-toggler-icon icon-bar"></span>
+       </button>
+    </div> -->
+    <div class="collapse navbar-collapse justify-content-end custom-search">
+       <ul class="navbar-nav mr-auto">
+          <li class="nav-item" [routerLinkActive]="'active'" [routerLink]="['/advisor-dashboard']">
+             <a class="nav-link">
+                <i class="pi pi-chart-pie"></i>
+                <span>Dashboard</span>
+             </a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/advisor-dashboard/liquidity-dashboard']">
+                <i class="pi pi-shopping-cart"></i>
+                <span>Marketplace</span>
+             </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/advisor-dashboard/client-list']">
+                <i class="pi pi-user"></i>
+                <span>Clients</span>
+             </a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/advisor-dashboard/deposit-accounts/deposit-account-landing']">
+                <i class="pi pi-briefcase"></i>
+                <span>Deposit Accounts</span>
+             </a>
+          </li>
+          <!-- <li class="nav-item">
+             <a class="nav-link">
+                <i class="pi pi-dollar"></i>
+                <span>Cash Movements</span>
+             </a>
+          </li> -->
+          <!-- <li class="nav-item">
+             <a class="nav-link">
+                <i class="pi pi-file"></i>
+                <span>SBL</span>
+             </a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link">
+                <i class="pi pi-credit-card"></i>
+                <span>Credit Card</span>
+             </a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link">
+                <i class="pi pi-home"></i>
+                <span>Mortgage</span>
+             </a>
+          </li>
+          <li class="nav-item">
+             <a class="nav-link">
+                <i class="pi pi-cog"></i>
+                <span>Setting</span>
+             </a>
+          </li> -->
+       </ul>
+    </div>
+ </div>

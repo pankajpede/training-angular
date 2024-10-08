@@ -1,0 +1,1777 @@
+<div class="flex justify-content-between flex-wrap mb-2">
+    <div class="flex align-items-center justify-content-center">
+        <div class="page-title float-left w-50">
+            <div class="breadcrum float-left w-100">
+                <a class="text-muted"><i class="pi pi-home float-left font-16"></i></a>
+                <span class="mx-2 float-left text-muted font-18">/</span>
+                <a class="text-muted font-14 text-medium cursor-pointer no-underline"
+                    routerLink="/deposit-accounts/deposit-account-landing">Deposit Accounts</a>
+                <!-- <span class="mx-2 float-left text-muted font-18">/</span>
+                <a class="text-muted font-14 text-medium">Account Holdings</a> -->
+            </div>
+            <div class="page-heading float-left w-100">
+                <span class="font-18 font-semibold text-primary">Account Holdings</span>
+            </div>
+        </div>
+    </div>
+    <div class="top-action-wrapper flex align-items-center justify-content-center">
+
+        <div class="field-wrapper px-3 font-14">
+            <label class="text-muted">Client Name</label>
+            <label>John and Barnes</label>
+        </div>
+        <div class="field-wrapper px-3 border-left-1 border-secondary font-14">
+            <label class="text-muted">Account Number</label>
+            <label>FI - AP - 285927</label>
+        </div>
+        <div class="field-wrapper px-3 border-left-1 border-right-1 mr-2 border-secondary font-14">
+            <label class="text-muted">Account Balance</label>
+            <label>{{cashBalanceTotal | currency: 'USD'}}</label>
+        </div>
+        <p-button icon="pi pi-info-circle" tooltipPosition="top" pTooltip="View Client Details"
+            (click)="showClientDetails = true" />
+
+        <p-divider layout="vertical" />
+
+        <p-button styleClass="flex align-items-center justify-content-center" icon="pi pi-plus" class="mr-1"
+            tooltipPosition="top" pTooltip="Create New Account" [routerLink]="['/advisor-dashboard/create-new-account']"/>
+
+        <!-- actions For Cash Balance -->
+        <!-- <div class="page-actions flex flex-row-reverse flex-wrap" *ngIf="activeIndex == 0">
+            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="liquidityDashboardTable.exportCSV()"/>
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="coloumnSelection.toggle($event)" />
+            <p-overlayPanel #coloumnSelection>
+                <div *ngFor="let tableColoumn of cashBalanceColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="selectedCashBalanceColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+                *ngIf="!searchExpanded" />
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                (click)="toggleSearch();liquidityDashboardTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                <input type="text" pInputText placeholder="Search" #searchTable
+                    (input)="liquidityDashboardTable.filterGlobal(searchTable.value,'contains')" />
+            </p-iconField>
+        </div> -->
+
+        <!-- actions For Transaction -->
+        <!-- <div class="page-actions flex flex-row-reverse flex-wrap" *ngIf="activeIndex == 1">
+            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="transactiondetailsTable.exportCSV()"/>
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="transactionColoumnSelection.toggle($event)" />
+            <p-overlayPanel #transactionColoumnSelection>
+                <div *ngFor="let tableColoumn of transactionDetailsColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="transactionDetailsColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+                *ngIf="!searchExpanded" />
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                (click)="toggleSearch();transactiondetailsTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                <input type="text" pInputText placeholder="Search" #searchTable
+                    (input)="transactiondetailsTable.filterGlobal(searchTable.value,'contains')" />
+            </p-iconField>
+        </div> -->
+
+        <!-- actions For Withdrawal Cash -->
+        <!-- <div class="page-actions flex flex-row-reverse flex-wrap" *ngIf="activeIndex == 2">
+            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="withdrawalCashTable.exportCSV()"/>
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="cashmovementlistColumnSelection.toggle($event)" />
+            <p-overlayPanel #cashmovementlistColumnSelection>
+                <div *ngFor="let tableColoumn of cashmovementlistColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="cashmovementlistColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+                *ngIf="!searchExpanded" />
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                (click)="toggleSearch();withdrawalCashTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                <input type="text" pInputText placeholder="Search" #searchTable
+                    (input)="withdrawalCashTable.filterGlobal(searchTable.value,'contains')" />
+            </p-iconField>
+        </div> -->
+
+        <!-- actions For Add Cash -->
+        <!-- <div class="page-actions flex flex-row-reverse flex-wrap" *ngIf="activeIndex == 3">
+            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="LinkedAccountsListTable.exportCSV()"/>
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="addCashcoloumnSelection.toggle($event)" />
+            <p-overlayPanel #addCashcoloumnSelection>
+                <div *ngFor="let tableColoumn of linkedAccountDetailsListColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="linkedAccountDetailsListColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+                *ngIf="!searchExpanded" />
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                (click)="toggleSearch();LinkedAccountsListTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                <input type="text" pInputText placeholder="Search" #searchTable
+                    (input)="LinkedAccountsListTable.filterGlobal(searchTable.value,'contains')" />
+            </p-iconField>
+        </div> -->
+
+
+        <!-- actions For Account Details -->
+        <!-- <div class="page-actions float-right flex  flex-wrap" *ngIf="activeIndex == 4">
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search" (click)="toggleSearch()"
+                *ngIf="!searchExpanded" />
+            <p-button class="search-icon" [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                (click)="toggleSearch();AccountDetailsListTable.filterGlobal('','contains')" *ngIf="searchExpanded" />
+            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                <input type="text" pInputText placeholder="Search" #searchTable
+                    (input)="AccountDetailsListTable.filterGlobal(searchTable.value,'contains')" />
+            </p-iconField>
+            
+            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                (click)="accountDetailsColoumnSelection.toggle($event)" />
+            <p-overlayPanel #accountDetailsColoumnSelection>
+                <div *ngFor="let tableColoumn of accountDetailsListColumns" class="field-checkbox">
+                    <p-checkbox [(ngModel)]="accountDetailsListColumns" [label]="tableColoumn?.header" name="header"
+                        [value]="tableColoumn" ></p-checkbox>
+                </div>
+            </p-overlayPanel>
+            
+            <p-button icon="pi pi-file-excel" class="mr-1" tooltipPosition="top" pTooltip="Export To Excel" 
+            (click)="AccountDetailsListTable.exportCSV()"/>
+
+        </div> -->
+
+        <!-- <p-divider layout="vertical" class="mx-1" /> -->
+
+    </div>
+</div>
+
+<div class="flex align-items-center justify-content-center">
+    <div class=" w-full">
+        <p-tabView styleClass="tabview-custom" [(activeIndex)]="activeIndex">
+            <!-- Cash Balance Panel Start Here -->
+            <p-tabPanel header="cash-balance">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center gap-2">
+                        <span class="font-medium white-space-nowrap m-0 font-14">
+                            <!-- <p-badge [value]="cashbalanceCount" /> -->
+                            Cash Balance
+                        </span>
+                    </div>
+                </ng-template>
+                <div class="card w-full">
+                    <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                        <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                            <p-badge [value]="cashbalanceCount" />
+                            <p class="float-left">Banks Accounts</p>
+                        </div>
+                        <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+                            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                (click)="liquidityDashboardTable.exportCSV()" />
+                            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                                (click)="coloumnSelection.toggle($event)" />
+                            <p-overlayPanel #coloumnSelection>
+                                <div *ngFor="let tableColoumn of cashBalanceColumns" class="field-checkbox">
+                                    <p-checkbox [(ngModel)]="selectedCashBalanceColumns" [label]="tableColoumn?.header"
+                                        name="header" [value]="tableColoumn"></p-checkbox>
+                                </div>
+                            </p-overlayPanel>
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                (click)="toggleSearch();liquidityDashboardTable.filterGlobal('','contains')"
+                                *ngIf="searchExpanded" />
+                            <p-iconField class="search-wrapper mr-1" iconPosition="left" *ngIf="searchExpanded">
+                                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                <input type="text" pInputText placeholder="Search" #searchTable
+                                    (input)="liquidityDashboardTable.filterGlobal(searchTable.value,'contains')" />
+                            </p-iconField>
+                        </div>
+                    </div>
+                    <div class="custom-table mb-3">
+                        <p-table [value]="cashbalancedetails" [columns]="selectedCashBalanceColumns"
+                            #liquidityDashboardTable styleClass="scrollable-custom-table" [scrollable]="true"
+                            scrollHeight="calc(100vh - 305px)"
+                            [globalFilterFields]="['bank', 'cashbalance', 'currentapr', 'estimatedannualincome']">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th pFrozenColumn pSortableColumn="Bank">
+                                        <p-columnFilter type="text" field="institution" display="menu"
+                                            [showAddButton]="false" [showOperator]="false" />
+                                        Bank
+                                        <p-sortIcon field="Bank" />
+                                    </th>
+                                    <ng-container *ngFor="let column of columns">
+                                        <th [pSortableColumn]="column?.field" style="width: 180px;">
+                                            <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                [showAddButton]="false" [showOperator]="false" />
+                                            {{column.header}}
+                                            <p-sortIcon [field]="column?.field" />
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                <tr>
+                                    <td>
+                                        {{ liquidity.bank }}
+                                    </td>
+                                    <ng-container *ngFor="let column of columns">
+
+                                        <td *ngIf="column.field === 'cashbalance'" class="text-right"
+                                            style="width:180px">
+                                            {{ liquidity.cashbalance | currency: 'USD' }}
+                                        </td>
+                                        <td *ngIf="column.field === 'currentapr'" class="text-right"
+                                            style="width:170px">
+                                            {{ liquidity.currentapr }}%
+                                        </td>
+                                        <td *ngIf="column.field === 'change'" class="text-right" style="width:170px">
+                                            {{ liquidity.marketvalue | currency: 'USD' }}
+                                        </td>
+                                        <td *ngIf="column.field === 'estimatedannualincome'" class="text-right"
+                                            style="width:240px">
+                                            {{ liquidity.estimatedannualincome | currency: 'USD' }}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="footer">
+                                <tr>
+                                    <td class="text-left font-semibold">Cash Total</td>
+                                    <td class="text-right font-semibold">{{cashBalanceTotal | currency: 'USD'}}</td>
+                                    <td class="text-right font-semibold">4.65%</td>
+                                    <td class="text-right font-semibold">{{estimatedAnnualBalanceTotal | currency:
+                                        'USD'}}</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <!-- Cash Balance Panel End Here -->
+            <!-- Transaction Panel Start Here -->
+            <p-tabPanel header="transactions">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center gap-2">
+                        <span class="font-medium white-space-nowrap m-0 font-14">
+                            <!-- <p-badge [value]="transactionCount" /> -->
+                            Transactions
+                        </span>
+                    </div>
+                </ng-template>
+                <div class="card w-full">
+                    <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                        <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                            <p-badge [value]="transactionCount" />
+                            <p class="float-left">Transactions</p>
+                        </div>
+                        <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+                            <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                (click)="transactiondetailsTable.exportCSV()" />
+                            <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection"
+                                (click)="transactionColoumnSelection.toggle($event)" />
+                            <p-overlayPanel #transactionColoumnSelection>
+                                <div *ngFor="let tableColoumn of transactionDetailsColumns" class="field-checkbox">
+                                    <p-checkbox [(ngModel)]="transactionDetailsColumns" [label]="tableColoumn?.header"
+                                        name="header" [value]="tableColoumn"></p-checkbox>
+                                </div>
+                            </p-overlayPanel>
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                            <p-button class="search-icon"
+                                [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                (click)="toggleSearch();transactiondetailsTable.filterGlobal('','contains')"
+                                *ngIf="searchExpanded" />
+                            <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                <input type="text" pInputText placeholder="Search" #searchTable
+                                    (input)="transactiondetailsTable.filterGlobal(searchTable.value,'contains')" />
+                            </p-iconField>
+                        </div>
+                    </div>
+                    <div class="custom-table mb-3">
+                        <p-table [value]="transactiondetails" [columns]="transactionDetailsColumns"
+                            #transactiondetailsTable [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 50, 100]"
+                            styleClass="scrollable-custom-table" [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                            [globalFilterFields]="['date', 'securityid', 'activitytype', 'netammount', 'accbalance']">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <ng-container *ngFor="let column of columns">
+                                        <th [pSortableColumn]="column?.field">
+                                            <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                [showAddButton]="false" [showOperator]="false" />
+                                            {{column.header}}
+                                            <p-sortIcon [field]="column?.field" />
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                <tr>
+                                    <ng-container *ngFor="let column of columns">
+
+                                        <td *ngIf="column.field === 'date'">
+                                            {{ liquidity.date }}
+                                        </td>
+                                        <!-- <td *ngIf="column.field === 'securityid'" style="width:170px">
+                                            {{ liquidity.securityid }}
+                                        </td> -->
+                                        <td *ngIf="column.field === 'activitytype'" style="width:180px">
+                                            {{ liquidity.activitytype }}
+                                        </td>
+                                        <td *ngIf="column.field === 'netammount'" class="text-right"
+                                            style="width:180px">
+                                            {{ liquidity.netammount | currency: 'USD' }}
+                                        </td>
+                                        <td *ngIf="column.field === 'accbalance'" class="text-right"
+                                            style="width:180px">
+                                            {{ liquidity.accbalance | currency: 'USD' }}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <!-- Transaction Panel End Here -->
+            <!-- Withdrawal Cash Panel Start Here -->
+            <p-tabPanel header="withdrawalCash">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center gap-2">
+                        <span class="font-medium white-space-nowrap m-0 font-14">
+                            <!-- <p-badge [value]="cashMovementCount" /> -->
+                            Withdraw Cash
+                        </span>
+                    </div>
+                </ng-template>
+                <div class="card w-full block">
+                    <!-- Bussiness Account Section -->
+                    <div class="w-full" *ngIf="tabBussinessAccount">
+                        <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                            <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                <p-badge [value]="bussinessAccountCount" />
+                                <p class="float-left">Business Account</p>
+
+                                
+                            </div>
+                            <div class="page-actions float-right flex">
+
+                                <p-dropdown 
+                                [options]="withdrawcashselection" [(ngModel)]="selectedWithdrawcashselection" [checkmark]="false" 
+                                optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                                (onChange)="withrawChangeTable()" class="mr-1" />
+
+                                <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                    <input type="text" pInputText placeholder="Search" #searchTable
+                                        (input)="bussinessAccountsTable.filterGlobal(searchTable.value,'contains')" />
+                                </p-iconField>
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                    (click)="toggleSearch();bussinessAccountsTable.filterGlobal('','contains')"
+                                    *ngIf="searchExpanded" />
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                (click)="toggleSearch()" *ngIf="!searchExpanded" />
+
+                                <p-overlayPanel #cashmovementlistColumnSelection>
+                                    <div *ngFor="let tableColoumn of bussinessAccountsListColumns"
+                                        class="field-checkbox">
+                                        <p-checkbox [(ngModel)]="bussinessAccountsListColumns"
+                                            [label]="tableColoumn?.header" name="header"
+                                            [value]="tableColoumn">
+                                        </p-checkbox>
+                                    </div>
+                                </p-overlayPanel>
+
+
+                                <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top" pTooltip="Column Selection" (click)="cashmovementlistColumnSelection.toggle($event)" />
+                                <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel" (click)="bussinessAccountsTable.exportCSV()" />
+
+                                <p-divider layout="vertical" class="mx-1" />
+
+                                <p-button icon="pi pi-send" class="mr-1" tooltipPosition="top" pTooltip="Withdraw Cash" (click)="showSendMovementModal = true" />
+                                <p-button icon="pi pi-building" tooltipPosition="top" pTooltip="Add Business" (click)="showAddBussiness = true" />
+                            </div>
+                        </div>
+                        <div class="custom-table mb-3" >
+                            <p-table [value]="bussinessAccountsList" [columns]="bussinessAccountsListColumns"
+                                #bussinessAccountsTable [paginator]="false" styleClass="scrollable-custom-table"
+                                [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                                [globalFilterFields]="['bussinessname', 'accholdername', 'accnumber', 'routingnumber']">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th style="width:50px">&nbsp;</th>
+                                        <ng-container *ngFor="let column of columns">
+                                            <th [pSortableColumn]="column?.field">
+                                                <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                    [showAddButton]="false" [showOperator]="false" />
+                                                {{column.header}}
+                                                <p-sortIcon [field]="column?.field" />
+                                            </th>
+                                        </ng-container>
+                                        <th alignFrozen="right" pFrozenColumn class="text-center">Actions</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                    <tr>
+                                        <td class="text-center">
+                                            <!-- <p-checkbox [binary]="true" inputId="binary" /> -->
+                                            <p-radioButton name="bussinessAccount" />
+                                        </td>
+                                        <ng-container *ngFor="let column of columns">
+                                            <td *ngIf="column.field === 'bussinessname'">
+                                                {{ liquidity.bussinessname }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accholdername'">
+                                                {{ liquidity.accholdername }}
+                                            </td>
+                                            <td *ngIf="column.field === 'bankname'">
+                                                {{ liquidity.bankname }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnumber'">
+                                                {{ liquidity.accnumber }}
+                                            </td>
+                                            <td *ngIf="column.field === 'routingnumber'">
+                                                {{ liquidity.routingnumber}}
+                                            </td>
+                                        </ng-container>
+                                        <td alignFrozen="right" pFrozenColumn
+                                            style="width: 80px; border-left: 1px solid #E8EBF3;">
+                                            <div class="card flex justify-content-center">
+                                                <!-- <p-button severity="primary" tooltipPosition="top" pTooltip="Delink"
+                                                    class="mr-1" icon="pi pi-link" size="small" [outlined]="true" /> -->
+                                                <p-button severity="danger" tooltipPosition="top" pTooltip="Delete"
+                                                    icon="pi pi-trash" size="small" [outlined]="true" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                    <!-- Linked Account Section -->
+                    <div class="w-full" *ngIf="tabLinkedAccount">
+                        <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                            <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                <p-badge [value]="linkedAccountCount" />
+                                <p class="float-left">Linked Account</p>
+                                <!-- <div class="preset-viewer float-left mr-1">
+                                    <ul class="float-left m-0 p-0">
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabBussinessAccount ? 'active' : '' "
+                                            (click)="tabBussinessAccountActive()">Bussiness Account</li>
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabLinkedAccount ? 'active' : '' "
+                                            (click)="tabLinkedAccountActive()">Linked Account</li>
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabTransaction ? 'active' : '' "
+                                            (click)="tabTransactionActive()">Details</li>
+                                    </ul>
+                                </div> -->
+                            </div>
+                            <div class="page-actions float-right flex">
+
+                                <p-dropdown 
+                                [options]="withdrawcashselection" [(ngModel)]="selectedWithdrawcashselection" [checkmark]="false" 
+                                optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                                (onChange)="withrawChangeTable()" class="mr-1" />
+
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                    (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                    (click)="toggleSearch();LinkedAccountsListTable.filterGlobal('','contains')"
+                                    *ngIf="searchExpanded" />
+                                <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                    <input type="text" pInputText placeholder="Search" #searchTable
+                                        (input)="LinkedAccountsListTable.filterGlobal(searchTable.value,'contains')" />
+                                </p-iconField>
+
+                                <p-button class="mr-1" icon="pi pi-table" tooltipPosition="top"
+                                    pTooltip="Column Selection" (click)="addCashcoloumnSelection.toggle($event)" />
+                                <p-overlayPanel #addCashcoloumnSelection>
+                                    <div *ngFor="let tableColoumn of linkedAccountDetailsListColumns"
+                                        class="field-checkbox">
+                                        <p-checkbox [(ngModel)]="linkedAccountDetailsListColumns"
+                                            [label]="tableColoumn?.header" name="header"
+                                            [value]="tableColoumn"></p-checkbox>
+                                    </div>
+                                </p-overlayPanel>
+
+                                <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                    (click)="LinkedAccountsListTable.exportCSV()" />
+
+                                <p-divider layout="vertical" class="mx-1" />
+                                <p-button icon="pi pi-send" class="mr-1" tooltipPosition="top" pTooltip="Withdraw Cash"
+                                    (click)="showSendMovementModal = true" />
+                                <p-button icon="pi pi-building" tooltipPosition="top" pTooltip="Add Business"
+                                    (click)="showAddBussiness = true" />
+
+                            </div>
+                        </div>
+                        <div class="custom-table mb-3">
+                            <p-table [value]="linkedAccountsList" [columns]="linkedAccountDetailsListColumns"
+                                #LinkedAccountsListTable [paginator]="false" styleClass="scrollable-custom-table"
+                                [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                                [globalFilterFields]="['accountname', 'accnameholdertype', 'bankname','acctype','accnumber','accountbalance']">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th style="width:50px">&nbsp;</th>
+                                        <ng-container *ngFor="let column of columns">
+                                            <th [pSortableColumn]="column?.field">
+                                                <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                    [showAddButton]="false" [showOperator]="false" />
+                                                {{column.header}}
+                                                <p-sortIcon [field]="column?.field" />
+                                            </th>
+                                        </ng-container>
+                                        <th alignFrozen="right" pFrozenColumn class="text-center">Actions</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                    <tr>
+                                        <td class="text-center">
+                                            <!-- <p-checkbox [binary]="true" inputId="binary" /> -->
+                                            <p-radioButton name="bussinessAccount" />
+                                        </td>
+                                        <ng-container *ngFor="let column of columns">
+                                            <td *ngIf="column.field === 'accountname'">
+                                                {{ liquidity.accountname }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnameholdertype'">
+                                                {{ liquidity.accnameholdertype }}
+                                            </td>
+                                            <td *ngIf="column.field === 'bankname'">
+                                                {{ liquidity.bankname }}
+                                            </td>
+                                            <td *ngIf="column.field === 'acctype'">
+                                                {{ liquidity.acctype }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnumber'">
+                                                {{ liquidity.accnumber }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accountbalance'" class="text-right"
+                                                style="min-width: 180px;">
+                                                <span *ngIf="liquidity.isloading == true" class="text-right">
+                                                    <i class="pi pi-spin pi-spinner"></i>
+                                                    <span class="font-12 text-color-secondary"
+                                                        style="display: block;">Fetching Data..</span>
+                                                </span>
+                                                <span *ngIf="liquidity.isloading == false">
+                                                    {{ liquidity.accountbalance }}
+                                                    <span class="font-12 text-color-secondary"
+                                                        style="display: block;">{{liquidity.accbalanceasof}}</span>
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                        <td alignFrozen="right" pFrozenColumn style="width: 100px; border-left: 1px solid #E8EBF3;">
+                                            <div class="card flex justify-content-center">
+                                                <p-button severity="primary" tooltipPosition="top" pTooltip="Refresh Balance" class="mr-1" icon="pi pi-sync" size="small" [outlined]="true" />
+                                                <!-- <p-button severity="primary" tooltipPosition="top" pTooltip="Delink"
+                                                    class="mr-1" icon="pi pi-link" size="small" [outlined]="true" /> -->
+                                                <p-button severity="danger" tooltipPosition="top" pTooltip="Delete"
+                                                    icon="pi pi-trash" size="small" [outlined]="true" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Section -->
+                    <div class="w-full" *ngIf="tabTransaction">
+                        <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                            <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                <p-badge [value]="cashMovementCount" />
+                                <p class="float-left">Transactions</p>
+
+                                <!-- <div class="preset-viewer float-left mr-1">
+                                    <ul class="float-left m-0 p-0">
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabBussinessAccount ? 'active' : '' "
+                                            (click)="tabBussinessAccountActive()">Bussiness Account</li>
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabLinkedAccount ? 'active' : '' "
+                                            (click)="tabLinkedAccountActive()">Linked Account</li>
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabTransaction ? 'active' : '' "
+                                            (click)="tabTransactionActive()">Details</li>
+                                    </ul>
+                                </div> -->
+                            </div>
+                            <div class="page-actions float-right flex">
+                                <p-dropdown 
+                                [options]="withdrawcashselection" [(ngModel)]="selectedWithdrawcashselection" [checkmark]="false" 
+                                optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                                (onChange)="withrawChangeTable()" class="mr-1" />
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                    (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                    (click)="toggleSearch();withdrawalCashTable.filterGlobal('','contains')"
+                                    *ngIf="searchExpanded" />
+                                <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                    <input type="text" pInputText placeholder="Search" #searchTable
+                                        (input)="withdrawalCashTable.filterGlobal(searchTable.value,'contains')" />
+                                </p-iconField>
+                                <p-overlayPanel #cashmovementlistColumnSelection>
+                                    <div *ngFor="let tableColoumn of cashmovementlistColumns" class="field-checkbox">
+                                        <p-checkbox [(ngModel)]="cashmovementlistColumns" [label]="tableColoumn?.header"
+                                            name="header" [value]="tableColoumn"></p-checkbox>
+                                    </div>
+                                </p-overlayPanel>
+                                <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top"
+                                    pTooltip="Column Selection" (click)="cashmovementlistColumnSelection.toggle($event)" />
+                                <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                    (click)="withdrawalCashTable.exportCSV()" />
+                                <p-divider layout="vertical" class="mx-1" />
+                                <p-button icon="pi pi-send" class="mr-1" tooltipPosition="top" pTooltip="Withdraw Cash"
+                                    *ngIf="activeIndex == 2" (click)="showSendMovementModal = true" />
+
+                                    <p-button icon="pi pi-building" tooltipPosition="top" pTooltip="Add Business"
+                                    *ngIf="activeIndex == 2" (click)="showAddBussiness = true" />
+
+                                
+                            </div>
+                        </div>
+                        <div class="custom-table mb-3 w-full">
+                            <p-table [value]="cashmovementlist" [columns]="cashmovementlistColumns" #withdrawalCashTable
+                                [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 50, 100]"
+                                styleClass="scrollable-custom-table" [scrollable]="true"
+                                scrollHeight="calc(100vh - 305px)"
+                                [globalFilterFields]="['recipientname', 'date', 'status', 'bankname', 'transfertype', 'accnumber', 'routingnumber', 'transferamount']">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th pFrozenColumn pSortableColumn="recipientname" style="min-width:160px">
+                                            <p-columnFilter type="text" field="recipientname" display="menu"
+                                                [showAddButton]="false" [showOperator]="false" />
+                                            Recipient Name
+                                            <p-sortIcon field="recipientname" />
+                                        </th>
+                                        <ng-container *ngFor="let column of columns">
+                                            <th [pSortableColumn]="column?.field">
+                                                <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                    [showAddButton]="false" [showOperator]="false" />
+                                                {{column.header}}
+                                                <p-sortIcon [field]="column?.field" />
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                    <tr>
+                                        <td pFrozenColumn style="min-width:250px">
+                                            {{ liquidity.recipientname }}
+                                        </td>
+                                        <ng-container *ngFor="let column of columns">
+
+                                            <td *ngIf="column.field === 'date'" style="min-width:160px">
+                                                {{ liquidity.date }}
+                                            </td>
+                                            <td *ngIf="column.field === 'status'" style="min-width:160px; text-align: center;">
+                                                <!-- {{ liquidity.status }} -->
+
+                                                <span class="tag tag-success cursor-pointer" *ngIf="liquidity.status == 'Completed'">
+                                                    <p-tag value="Completed" severity="success"  />
+                                                </span>
+                                                <span *ngIf="liquidity.status == 'Pending'">
+                                                    <p-tag value="Pending" severity="danger" />
+                                                </span>
+                                            </td>
+                                            <td *ngIf="column.field === 'bankname'" style="min-width:160px">
+                                                {{ liquidity.bankname}}
+                                            </td>
+                                            <td *ngIf="column.field === 'transfertype'" style="min-width:170px">
+                                                {{ liquidity.transfertype}}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnumber'" style="min-width:200px">
+                                                {{ liquidity.accnumber}}
+                                            </td>
+                                            <td *ngIf="column.field === 'routingnumber'" style="min-width:180px">
+                                                {{ liquidity.routingnumber}}
+                                            </td>
+                                            <td *ngIf="column.field === 'transferamount'" class="text-right"
+                                                style="min-width:180px">
+                                                {{ liquidity.transferamount | currency: 'USD' }}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+
+            </p-tabPanel>
+            <!-- Withdrawal Cash Panel End Here -->
+            <!-- Add Cash Start Here -->
+            <p-tabPanel header="addCash">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center gap-2">
+                        <span class="font-medium white-space-nowrap m-0 font-14">
+                            <!-- <p-badge [value]="accountDetailCount" /> -->
+                            Add Cash
+                        </span>
+                    </div>
+                </ng-template>
+                <div class="card w-full">
+
+                    <!-- Linked Account Section -->
+                    <div class="w-full" *ngIf="tabLinkedAccountAddCash">
+                        <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                            <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                <p-badge [value]="linkedAccountCount" />
+                                <p class="float-left">Linked Account</p>
+                                <!-- <div class="preset-viewer float-left mr-1">
+                                    <ul class="float-left m-0 p-0">
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabLinkedAccountAddCash ? 'active' : '' "
+                                            (click)="tabLinkedAccountAddCashActive()">Linked Account</li>
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabTransactionAddCash ? 'active' : '' "
+                                            (click)="tabTransactionAddCashActive()">Details</li>
+                                    </ul>
+                                </div> -->
+                            </div>
+                            <div class="page-actions float-right flex flex-wrap">
+                                <p-dropdown 
+                                [options]="addcashselection" [(ngModel)]="selectedAddcashselection" [checkmark]="false" 
+                                optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                                (onChange)="addChangeTable()" class="mr-1" />
+
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                    (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                    (click)="toggleSearch();LinkedAccountsListTable.filterGlobal('','contains')"
+                                    *ngIf="searchExpanded" />
+                                <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                    <input type="text" pInputText placeholder="Search" #searchTable
+                                        (input)="LinkedAccountsListTable.filterGlobal(searchTable.value,'contains')" />
+                                </p-iconField>
+
+                                <p-button class="mr-1" icon="pi pi-table" tooltipPosition="top"
+                                    pTooltip="Column Selection" (click)="addCashcoloumnSelection.toggle($event)" />
+                                <p-overlayPanel #addCashcoloumnSelection>
+                                    <div *ngFor="let tableColoumn of linkedAccountDetailsListColumns"
+                                        class="field-checkbox">
+                                        <p-checkbox [(ngModel)]="linkedAccountDetailsListColumns"
+                                            [label]="tableColoumn?.header" name="header"
+                                            [value]="tableColoumn"></p-checkbox>
+                                    </div>
+                                </p-overlayPanel>
+
+                                <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                    (click)="LinkedAccountsListTable.exportCSV()" />
+
+                                <p-divider layout="vertical" class="mx-1" />
+                                <p-button icon="pi pi-send" tooltipPosition="top" pTooltip="Add Cash"
+                                    (click)="showAddCashModal = true" />
+
+                            </div>
+                        </div>
+                        <div class="custom-table mb-3">
+                            <p-table [value]="linkedAccountsList" [columns]="linkedAccountDetailsListColumns"
+                                #LinkedAccountsListTable [paginator]="false" styleClass="scrollable-custom-table"
+                                [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                                [globalFilterFields]="['accountname', 'accnameholdertype', 'bankname','acctype','accnumber','accountbalance']">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th style="width:50px">&nbsp;</th>
+                                        <ng-container *ngFor="let column of columns">
+                                            <th [pSortableColumn]="column?.field">
+                                                <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                    [showAddButton]="false" [showOperator]="false" />
+                                                {{column.header}}
+                                                <p-sortIcon [field]="column?.field" />
+                                            </th>
+                                        </ng-container>
+                                        <th alignFrozen="right" pFrozenColumn class="text-center">Actions</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                    <tr>
+                                        <td class="text-center">
+                                            <!-- <p-checkbox [binary]="true" inputId="binary" /> -->
+                                            <p-radioButton name="bussinessAccount" />
+                                        </td>
+                                        <ng-container *ngFor="let column of columns">
+                                            <td *ngIf="column.field === 'accountname'" style="min-width:175px">
+                                                {{ liquidity.accountname }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnameholdertype'" style="min-width:210px">
+                                                {{ liquidity.accnameholdertype }}
+                                            </td>
+                                            <td *ngIf="column.field === 'bankname'" style="min-width:175px">
+                                                {{ liquidity.bankname }}
+                                            </td>
+                                            <td *ngIf="column.field === 'acctype'" style="min-width:175px">
+                                                {{ liquidity.acctype }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnumber'" style="min-width:185px">
+                                                {{ liquidity.accnumber }}
+                                            </td>
+                                            <td *ngIf="column.field === 'accountbalance'" class="text-right"
+                                                style="min-width: 180px;">
+                                                <span *ngIf="liquidity.isloading == true" class="text-right">
+                                                    <i class="pi pi-spin pi-spinner"></i>
+                                                    <span class="font-12 text-color-secondary"
+                                                        style="display: block;">Fetching Data..</span>
+                                                </span>
+                                                <span *ngIf="liquidity.isloading == false">
+                                                    {{ liquidity.accountbalance }}
+                                                    <span class="font-12 text-color-secondary"
+                                                        style="display: block;">{{liquidity.accbalanceasof}}</span>
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                        <td alignFrozen="right" pFrozenColumn style="width: 100px; border-left: 1px solid #E8EBF3;">
+                                            <div class="card flex justify-content-center">
+                                                <p-button severity="primary" tooltipPosition="top" pTooltip="Refresh Balance" class="mr-1" icon="pi pi-sync" size="small" [outlined]="true" />
+                                                <!-- <p-button severity="primary" tooltipPosition="top" pTooltip="Delink"
+                                                    class="mr-1" icon="pi pi-link" size="small" [outlined]="true" /> -->
+                                                <p-button severity="danger" tooltipPosition="top" pTooltip="Delete"
+                                                    icon="pi pi-trash" size="small" [outlined]="true" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Section -->
+                    <div class="w-full" *ngIf="tabTransactionAddCash">
+                        <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                            <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                <p-badge [value]="cashMovementCount" />
+                                <p class="float-left">Transactions</p>
+
+                                <!-- <div class="preset-viewer float-left mr-1">
+                                    <ul class="float-left m-0 p-0">
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabLinkedAccountAddCash ? 'active' : '' "
+                                            (click)="tabLinkedAccountAddCashActive()">Linked Account</li>
+                                        <li class="cursor-pointer float-left text-color-secondary font-14"
+                                            [ngClass]="tabTransactionAddCash ? 'active' : '' "
+                                            (click)="tabTransactionAddCashActive()">Details</li>
+                                    </ul>
+                                </div> -->
+                            </div>
+                            <div class="page-actions float-right flex flex-row-reverse flex-wrap">
+
+                                <p-button icon="pi pi-send" tooltipPosition="top" pTooltip="Add Cash"
+                                    (click)="showAddCashModal = true" />
+
+                                <p-divider layout="vertical" class="mx-1" />
+
+                                <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                    (click)="withdrawalCashTable.exportCSV()" />
+                                <p-button icon="pi pi-table" class="mr-1" tooltipPosition="top"
+                                    pTooltip="Column Selection"
+                                    (click)="cashmovementlistColumnSelection.toggle($event)" />
+                                <p-overlayPanel #cashmovementlistColumnSelection>
+                                    <div *ngFor="let tableColoumn of cashmovementlistColumns" class="field-checkbox">
+                                        <p-checkbox [(ngModel)]="cashmovementlistColumns" [label]="tableColoumn?.header"
+                                            name="header" [value]="tableColoumn"></p-checkbox>
+                                    </div>
+                                </p-overlayPanel>
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                    (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                                <p-button class="search-icon"
+                                    [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                    icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                    (click)="toggleSearch();withdrawalCashTable.filterGlobal('','contains')"
+                                    *ngIf="searchExpanded" />
+                                <p-iconField class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                    <input type="text" pInputText placeholder="Search" #searchTable
+                                        (input)="withdrawalCashTable.filterGlobal(searchTable.value,'contains')" />
+                                </p-iconField>
+                                <p-dropdown 
+                                [options]="addcashselection" [(ngModel)]="selectedAddcashselection" [checkmark]="false" 
+                                optionLabel="name" [showClear]="false" placeholder="Select" [styleClass]="'titleDropdown'"
+                                (onChange)="addChangeTable()" class="mr-1" />
+
+                            </div>
+                        </div>
+                        <div class="custom-table mb-3 w-full">
+                            <p-table [value]="cashmovementlist" [columns]="cashmovementlistColumns" #withdrawalCashTable
+                                [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 50, 100]"
+                                styleClass="scrollable-custom-table" [scrollable]="true"
+                                scrollHeight="calc(100vh - 305px)"
+                                [globalFilterFields]="['recipientname', 'date', 'status', 'bankname', 'transfertype', 'accnumber', 'routingnumber', 'transferamount']">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th pFrozenColumn pSortableColumn="recipientname" style="min-width:160px">
+                                            <p-columnFilter type="text" field="recipientname" display="menu"
+                                                [showAddButton]="false" [showOperator]="false" />
+                                            Sender Name
+                                            <p-sortIcon field="recipientname" />
+                                        </th>
+                                        <ng-container *ngFor="let column of columns">
+                                            <th [pSortableColumn]="column?.field">
+                                                <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                    [showAddButton]="false" [showOperator]="false" />
+                                                {{column.header}}
+                                                <p-sortIcon [field]="column?.field" />
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                    <tr>
+                                        <td pFrozenColumn style="min-width:250px">
+                                            {{ liquidity.sendername }}
+                                        </td>
+                                        <ng-container *ngFor="let column of columns">
+
+                                            <td *ngIf="column.field === 'date'" style="min-width:160px">
+                                                {{ liquidity.date }}
+                                            </td>
+                                            <td *ngIf="column.field === 'status'" style="min-width:160px; text-align: center;">
+                                                <!-- {{ liquidity.status }} -->
+
+                                                <span class="tag tag-success cursor-pointer" *ngIf="liquidity.status == 'Completed'">
+                                                    <p-tag value="Completed" severity="success"  />
+                                                </span>
+                                                <span *ngIf="liquidity.status == 'Pending'">
+                                                    <p-tag value="Pending" severity="danger" />
+                                                </span>
+                                            </td>
+                                            <td *ngIf="column.field === 'bankname'" style="min-width:160px">
+                                                {{ liquidity.bankname}}
+                                            </td>
+                                            <td *ngIf="column.field === 'transfertype'" style="min-width:170px">
+                                                {{ liquidity.transfertype}}
+                                            </td>
+                                            <td *ngIf="column.field === 'accnumber'" style="min-width:200px">
+                                                {{ liquidity.accnumber}}
+                                            </td>
+                                            <td *ngIf="column.field === 'routingnumber'" style="min-width:180px">
+                                                {{ liquidity.routingnumber}}
+                                            </td>
+                                            <td *ngIf="column.field === 'transferamount'" class="text-right"
+                                                style="min-width:180px">
+                                                {{ liquidity.transferamount | currency: 'USD' }}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <!-- Add Cash End Here -->
+            <!-- Account Details Start Here -->
+            <p-tabPanel header="accountDetails">
+                <ng-template pTemplate="header">
+                    <div class="flex align-items-center gap-2">
+                        <span class="font-medium white-space-nowrap m-0 font-14">
+                            <!-- <p-badge [value]="accountDetailCount" /> -->
+                            Account Details
+                        </span>
+                    </div>
+                </ng-template>
+                <div class="card w-full">
+                    <div class="flex flex-column">
+                        <div class="flex flex-column">
+                            <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                                <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                    <p-badge [value]="accountDetailCount" />
+                                    <p class="float-left">Accounts</p>
+                                </div>
+                                <div class="page-actions float-right flex  flex-wrap">
+                                    <p-button class="search-icon"
+                                        [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                        icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                        (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                                    <p-button class="search-icon"
+                                        [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                        icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                        (click)="toggleSearch();AccountDetailsListTable.filterGlobal('','contains')"
+                                        *ngIf="searchExpanded" />
+                                    <p-iconField class="mr-1" class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                        <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                        <input type="text" pInputText placeholder="Search" #searchTable
+                                            (input)="AccountDetailsListTable.filterGlobal(searchTable.value,'contains')" />
+                                    </p-iconField>
+                                    <p-button class="mr-1" icon="pi pi-table" tooltipPosition="top" pTooltip="Column Selection"
+                                        (click)="accountDetailsColoumnSelection.toggle($event)" />
+                                    <p-overlayPanel #accountDetailsColoumnSelection>
+                                        <div *ngFor="let tableColoumn of accountDetailsListColumns" class="field-checkbox">
+                                            <p-checkbox [(ngModel)]="accountDetailsListColumns" [label]="tableColoumn?.header"
+                                                name="header" [value]="tableColoumn"></p-checkbox>
+                                        </div>
+                                    </p-overlayPanel>
+                                    <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                        (click)="AccountDetailsListTable.exportCSV()" />
+        
+        
+                                    <!-- <p-divider layout="vertical" />
+                                    <p-button styleClass="flex align-items-center justify-content-center" icon="pi pi-plus" class="mr-1" tooltipPosition="top" pTooltip="Create New Account" /> -->
+                                </div>
+                            </div>
+                            <div class="custom-table mb-3">
+                                <p-table [value]="accountDetailsList" [columns]="accountDetailsListColumns"
+                                    #AccountDetailsListTable [paginator]="false" styleClass="scrollable-custom-table"
+                                    [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                                    [globalFilterFields]="['accname', 'clientname', 'accnumber', 'acctype', 'accstatus', 'accnumber', 'accbalance']">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <ng-container *ngFor="let column of columns">
+                                                <th [pSortableColumn]="column?.field">
+                                                    <p-columnFilter type="text" [field]="column?.field" display="menu"
+                                                        [showAddButton]="false" [showOperator]="false" />
+                                                    {{column.header}}
+                                                    <p-sortIcon [field]="column?.field" />
+                                                </th>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                        <tr>
+                                            <ng-container *ngFor="let column of columns">
+                                                <td *ngIf="column.field === 'accname'" style="min-width:160px">
+                                                    {{ liquidity.accname }}
+                                                </td>
+                                                <td *ngIf="column.field === 'clientname'" style="min-width:160px">
+                                                    {{ liquidity.clientname }}
+                                                </td>
+                                                <td *ngIf="column.field === 'accnumber'" style="min-width:130px">
+                                                    {{ liquidity.accnumber }}
+                                                </td>
+                                                <td *ngIf="column.field === 'acctype'" style="min-width:160px">
+                                                    {{ liquidity.acctype}}
+                                                </td>
+                                                <td *ngIf="column.field === 'accstatus'" style="min-width:170px">
+                                                    {{ liquidity.accstatus}}
+                                                </td>
+                                                <td *ngIf="column.field === 'accbalance'" class="text-right"
+                                                    style="min-width:180px">
+                                                    {{ liquidity.accbalance | currency: 'USD' }}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full">
+                            <p-divider align="left" type="dotted" class="m-0">
+                                <span class="font-14 text-color-secondary">Advisor Revenue Sharing</span>
+                            </p-divider>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="float-left w-full">
+                                <div class="flex-1 flex align-items-center justify-content-center gap-2">
+                                    <div class="flex-grow-1 flex flex-column">
+                                        <label for="username" class="form-label">Full Name <span class="text-color-secondary mx-1 font-italic">(Primary)</span></label>
+                                        <input pInputText id="username" value="Mr. Brett Watson" [disabled]="true"/>
+                                    </div>
+                                    <div class="flex-grow-1 flex flex-column" style="max-width: 125px;">
+                                        <label for="username" class="form-label">Revenue Sharing</label> 
+                                        <div class="flex">
+                                            <input pInputText id="username" [(ngModel)]="primaryRevenueSharing"  value="{{100 - secondaryRevenueSharing1 - secondaryRevenueSharing2}}" class="w-full border-right-none border-noround-right" />
+                                            <p-inputGroupAddon >%</p-inputGroupAddon>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="flex">
+                                        <p-button [outlined]="true" icon="pi pi-search" class="mr-1 mt-4" tooltipPosition="top" pTooltip="Search Advisor" (click)="showExistingAdvisorList = true"/>
+                                    </div> -->
+                                </div>
+                                <div class="flex-1 flex align-items-center justify-content-center mt-2 gap-2" *ngIf="secondaryAdvisory">
+                                    <div class="flex-grow-1 flex flex-column">
+                                        <label for="username" class="form-label">Full Name <span class="text-color-secondary mx-1 font-italic">(Secondary)</span></label>
+                                        <input pInputText id="username" placeholder="Enter Name" [(ngModel)]="secondaryAdvisoryName" [disabled]="true"/>
+                                    </div>
+                                    <div class="flex-grow-1 flex flex-column" style="max-width: 125px;">
+                                        <label for="username" class="form-label">Revenue Sharing</label> 
+                                        <div class="flex">
+                                            <input pInputText id="username" placeholder="Enter" [(ngModel)]="secondaryRevenueSharing2" value="{{100 - primaryRevenueSharing - secondaryRevenueSharing1}}" class="w-full border-right-none border-noround-right" />
+                                            <p-inputGroupAddon >%</p-inputGroupAddon>
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <p-button [outlined]="true" icon="pi pi-search" class="mr-1 mt-4" tooltipPosition="top" pTooltip="Search Advisor" (click)="showExistingAdvisorList = true"/>
+                                        <p-button [outlined]="true" icon="pi pi-minus" class="mr-1 mt-4" tooltipPosition="top" pTooltip="Remove Advisor" (click)="removeSecondaryHolder()"/>
+                                        <p-button [outlined]="true" icon="pi pi-plus" class="mt-4" tooltipPosition="top" pTooltip="Add Advisor"  (click)="addSecondaryHolder()"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <p-divider layout="vertical"/>
+                            <div class="float-left w-full">
+                                <div class="flex-1 flex align-items-center justify-content-center gap-2">
+                                    <div class="flex-grow-1 flex flex-column">
+                                        <label for="username" class="form-label">Full Name <span class="text-color-secondary mx-1 font-italic">(Secondary)</span></label>
+                                        <input pInputText id="username" [(ngModel)]="primaryAdvisoryName" [disabled]="true"/>
+                                    </div>
+                                    <div class="flex-grow-1 flex flex-column" style="max-width: 125px;">
+                                        <label for="username" class="form-label">Revenue Sharing</label> 
+                                        <div class="flex">
+                                            <input pInputText id="username" [(ngModel)]="secondaryRevenueSharing1" class="w-full border-right-none border-noround-right" />
+                                            <p-inputGroupAddon >%</p-inputGroupAddon>
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <p-button [outlined]="true" icon="pi pi-search" class="mr-1 mt-4" tooltipPosition="top" pTooltip="Search Advisor" (click)="showExistingAdvisorList = true"/>
+                                        <p-button [outlined]="true" icon="pi pi-minus" class="mr-1 mt-4" tooltipPosition="top" pTooltip="Remove Advisor" (click)="removeSecondaryHolder()"/>
+                                        <p-button [outlined]="true" icon="pi pi-plus" class="mt-4" tooltipPosition="top" pTooltip="Add Advisor" 
+                                        *ngIf="!secondaryAdvisory" (click)="addSecondaryHolder()"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="flex flex-column">
+                            <div class="top-action-wrapper flex justify-content-between flex-wrap-end mb-2">
+                                <div class="page-subtitle float-left flex justify-content-left gap-2 align-items-center">
+                                    <p-badge [value]="advisorListCount" />
+                                    <p class="float-left">Advisor</p>
+                                </div>
+                                <div class="page-actions float-right flex  flex-wrap">
+                                    <p-button class="search-icon"
+                                        [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                        icon="pi pi pi-search" class="mr-1" tooltipPosition="top" pTooltip="Search"
+                                        (click)="toggleSearch()" *ngIf="!searchExpanded" />
+                                    <p-button class="search-icon"
+                                        [ngClass]="searchExpanded ? 'search-expanded' : 'search-collapsed'"
+                                        icon="pi pi pi-times" class="mr-1" tooltipPosition="top" pTooltip="Close Search"
+                                        (click)="toggleSearch();AdvisorListTable.filterGlobal('','contains')"
+                                        *ngIf="searchExpanded" />
+                                    <p-iconField class="mr-1" class="search-wrapper" iconPosition="left" *ngIf="searchExpanded">
+                                        <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                                        <input type="text" pInputText placeholder="Search" #searchTable
+                                            (input)="AdvisorListTable.filterGlobal(searchTable.value,'contains')" />
+                                    </p-iconField>
+                                    <p-button class="mr-1" icon="pi pi-table" tooltipPosition="top" pTooltip="Column Selection"
+                                        (click)="accountDetailsColoumnSelection.toggle($event)" />
+                                    <p-overlayPanel #accountDetailsColoumnSelection>
+                                        <div *ngFor="let tableColoumn of accountDetailsListColumns" class="field-checkbox">
+                                            <p-checkbox [(ngModel)]="accountDetailsListColumns" [label]="tableColoumn?.header"
+                                                name="header" [value]="tableColoumn"></p-checkbox>
+                                        </div>
+                                    </p-overlayPanel>
+                                    <p-button icon="pi pi-file-excel" tooltipPosition="top" pTooltip="Export To Excel"
+                                        (click)="AdvisorListTable.exportCSV()" />
+                                </div>
+                            </div>
+                            <div class="custom-table mb-3">
+                                <p-table [value]="advisorlist" [columns]="advisorColumns"
+                                    #AdvisorListTable [paginator]="false" styleClass="scrollable-custom-table"
+                                    [scrollable]="true" scrollHeight="calc(100vh - 305px)"
+                                    [globalFilterFields]="['advisorname', 'share']">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <ng-container *ngFor="let column of columns">
+                                                <th [pSortableColumn]="column?.field">
+                                                    <p-columnFilter type="text" [field]="column?.field" display="menu" [showAddButton]="false" [showOperator]="false" />
+                                                    {{column.header}}
+                                                    <p-sortIcon [field]="column?.field" />
+                                                </th>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                        <tr>
+                                            <ng-container *ngFor="let column of columns">
+                                                <td *ngIf="column.field === 'advisorname'">
+                                                    {{ liquidity.advisorname }}
+                                                </td>
+                                                <td *ngIf="column.field === 'share'">
+                                                    {{ liquidity.share }}
+                                                </td>
+                                            </ng-container>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+            </p-tabPanel>
+            <!-- Account Details End Here -->
+        </p-tabView>
+    </div>
+</div>
+
+
+
+<!-- Client Details Modal -->
+<p-dialog header="Client Details - John and Barnes" [(visible)]="showClientDetails" [modal]="true"
+    [styleClass]="'custom-label-form'" [breakpoints]="{ '1199px': '499px', '499px': '100%' }"
+    [style]="{ width: '499px' }" [draggable]="false" [resizable]="false">
+    <div class="flex flex-column">
+        <p-divider align="left" type="dotted" class="m-0">
+            <span class="font-14 text-color-secondary">Primary Client Details</span>
+        </p-divider>
+        <div class="flex align-items-center justify-content-left gap-2 mb-3">
+            <label class="form-label">Client Name :</label>
+            <label>John and Barnes</label>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-2 mb-3">
+            <label class="form-label">Primary Phone :</label>
+            <label>+1 (605) 583-9234</label>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-2 mb-3">
+            <label class="form-label">Primary Email :</label>
+            <label>cssmith&#64;gmail.com</label>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-2 mb-5">
+            <label class="form-label">Address :</label>
+            <label>4049 Ivins Ave, Egg Harbor Township, New York, NY, 10007</label>
+        </div>
+        <p-divider align="left" type="dotted">
+            <span class="font-14 text-color-secondary">Secondary Client Details</span>
+        </p-divider>
+        <div class="flex align-items-center justify-content-left gap-2 mb-3">
+            <label class="form-label">Client Name :</label>
+            <label>Mr. Charles Smith</label>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-2 mb-3">
+            <label class="form-label">Primary Phone :</label>
+            <label>+1 (605) 583-9234</label>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-2 mb-3">
+            <label class="form-label">Primary Email :</label>
+            <label>cssmith&#64;gmail.com</label>
+        </div>
+        <div class="flex align-items-center justify-content-left gap-2 mb-5">
+            <label class="form-label">Address :</label>
+            <label>4049 Ivins Ave, Egg Harbor Township, New York, NY, 10007</label>
+        </div>
+    </div>
+</p-dialog>
+
+
+<!-- Add Bussiness Modal -->
+<p-dialog header="Add New Business" [(visible)]="showAddBussiness" [modal]="true" [styleClass]="'custom-label-form'"
+    [breakpoints]="{ '1199px': '699px', '699px': '100%' }" [style]="{ width: '699px' }" [draggable]="false"
+    [resizable]="false">
+
+    <div class="flex-1 flex align-items-center justify-content-center gap-3 mb-3">
+        <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Business Name</label>
+            <input pInputText id="username" placeholder="Enter Business Name" />
+        </div>
+    </div>
+    <div class="flex-1 flex align-items-center justify-content-center gap-3 mb-3">
+        <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Account Holder Name</label>
+            <input pInputText id="username" placeholder="Enter Account Holder Name" />
+        </div>
+    </div>
+    <div class="flex-1 flex align-items-center justify-content-center gap-3">
+        <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Account Number</label>
+            <input pInputText id="username" placeholder="Enter Account Number" />
+        </div>
+        <div class="flex-grow-1 flex flex-column">
+            <label for="username" class="form-label">Routing Number</label>
+            <input pInputText id="username" placeholder="Enter Routing Number" />
+        </div>
+    </div>
+    <ng-template pTemplate="footer" class="py-2">
+        <p-button label="Cancel" severity="secondary" [outlined]="true" (click)="showAddBussiness = false" />
+        <p-button label="Create" (click)="showAddBussiness = false" />
+    </ng-template>
+</p-dialog>
+
+
+<!-- Withdraw Cash Modal -->
+<p-dialog header="Withdraw Cash" [(visible)]="showSendMovementModal" [modal]="true" [styleClass]="'custom-label-form'"
+    [breakpoints]="{ '1199px': '899px', '899px': '100%' }" [style]="{ width: '899px' }" [draggable]="false"
+    [resizable]="false">
+    <p-tabView [(activeIndex)]="modalActiveIndex">
+        <p-tabPanel header="Movement Details">
+            <div class="flex flex-column">
+                <p-divider align="left" type="dotted" class="m-0">
+                    <span class="font-14 text-color-secondary">Sender Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">John and Barnes</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Balance :</label>
+                        <label class="font-regular mr-1">{{cashBalanceTotal | currency: 'USD'}}</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">12461-141-13</label>
+                    </div>
+                </div>
+
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Recipient's Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Recipient/Organization Name :</label>
+                        <label class="font-regular mr-1">Exotic Cars</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Bank Name :</label>
+                        <label class="font-regular mr-1">Bank of America</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">Exotic Cars</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Transaction Details</span>
+                </p-divider>
+                <div class="flex align-items-top justify-content-left gap-5 mb-3">
+                    <div class="flex-1 flex align-items-top justify-content-center">
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Transaction Type</label>
+                            <p-dropdown
+                                [options]="transaction" [(ngModel)]="selectedTransaction" [checkmark]="true"
+                                optionLabel="name" [showClear]="true" placeholder="Select Type" />
+                        </div>
+                    </div>
+                    <div class="flex-1 flex align-items-top justify-content-center">
+
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Transaction Amount</label>
+                            <p-inputGroup>
+                                <p-inputGroupAddon>$</p-inputGroupAddon>
+                                <input type="text" pInputText placeholder="Amount"/>
+                            </p-inputGroup>
+                            <label class="font-12 mt-1">Available Balance : {{cashBalanceTotal | currency: 'USD'}}</label>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="flex align-items-center justify-content-center gap-3 mt-3">
+                <p-button label="Cancel" severity="secondary" [outlined]="true"
+                    (click)="showSendMovementModal = false" />
+                <p-button label="Next" (click)="modalActiveIndex = 1" />
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Review Transaction">
+            <div class="flex flex-column">
+                <p-divider align="left" type="dotted" class="m-0">
+                    <span class="font-14 text-color-secondary">Sender Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">John and Barnes</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Balance :</label>
+                        <label class="font-regular mr-1">{{cashBalanceTotal | currency: 'USD'}}</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">12461-141-13</label>
+                    </div>
+                </div>
+
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Recipient's Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Recipient/Organization Name :</label>
+                        <label class="font-regular mr-1">Exotic Cars</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Bank Name :</label>
+                        <label class="font-regular mr-1">Bank of America</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">Exotic Cars</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Transaction Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Transaction Type :</label>
+                        <label class="font-regular mr-1">Same Day</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Transaction Amount :</label>
+                        <label class="font-regular mr-1">$1,25,00.00</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="flex align-items-center justify-content-center gap-3">
+                <p-button label="Back" severity="secondary" [outlined]="true" (click)="modalActiveIndex = 0" />
+                <p-button label="Initiate Approval" (click)="modalActiveIndex = 2" />
+            </div>
+
+        </p-tabPanel>
+
+        <p-tabPanel header="Approval Status">
+            <div class="w-100 text-center mt-3">
+                <div role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="--value: 100">
+                </div>
+                <p class="my-3">
+                    <span class="p-2 border-orange-500 border-1 border-circle"><i class="pi pi-exclamation-triangle text-orange-500 font-20"></i></span>
+                    Approval request sent to John and Barnes</p>
+                <p-button label="Close" (click)="approvalChange()" />
+            </div>
+        </p-tabPanel>
+
+
+        <ng-template pTemplate="footer" class="py-2">
+            <p-button label="Back" severity="secondary" [outlined]="true" (click)="modalActiveIndex = 1" />
+            <p-button label="Next" (click)="modalActiveIndex = 2" />
+        </ng-template>
+
+
+    </p-tabView>
+</p-dialog>
+
+<!-- Add Cash Modal -->
+<p-dialog header="Add Cash" [(visible)]="showAddCashModal" [modal]="true" [styleClass]="'custom-label-form'"
+    [breakpoints]="{ '1199px': '899px', '899px': '100%' }" [style]="{ width: '899px' }" [draggable]="false"
+    [resizable]="false">
+    <p-tabView [(activeIndex)]="modalActiveIndex">
+        <p-tabPanel header="Movement Details">
+            <div class="flex flex-column">
+                <p-divider align="left" type="dotted" class="m-0">
+                    <span class="font-14 text-color-secondary">Sender Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Sender Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Bank Name :</label>
+                        <label class="font-regular mr-1">Bank of Central Asia</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Recipient's Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">John and Barnes</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 512611</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Balance :</label>
+                        <label class="font-regular mr-1">{{cashBalanceTotal | currency: 'USD'}}</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">12461-141-13</label>
+                    </div>
+                </div>
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Transaction Details</span>
+                </p-divider>
+                <div class="flex align-items-top justify-content-left gap-5 mb-3">
+                    <div class="flex-1 flex align-items-top justify-content-center">
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Transaction Type</label><p-dropdown
+                                [options]="transaction" [(ngModel)]="selectedTransaction" [checkmark]="true"
+                                optionLabel="name" [showClear]="true" placeholder="Select Type" />
+                        </div>
+                    </div>
+                    <div class="flex-1 flex align-items-top justify-content-center">
+
+                        <div class="flex-grow-1 flex flex-column">
+                            <label for="username" class="form-label">Transaction Amount</label>
+                            <p-inputGroup>
+                                <p-inputGroupAddon>$</p-inputGroupAddon>
+                                <input type="text" pInputText placeholder="Price" value="1,25,00.00" />
+                            </p-inputGroup>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex align-items-center justify-content-center gap-3 mt-3">
+                <p-button label="Cancel" severity="secondary" [outlined]="true" (click)="showAddCashModal = false" />
+                <p-button label="Next" (click)="modalActiveIndex = 1" />
+            </div>
+        </p-tabPanel>
+
+        <p-tabPanel header="Review Transaction">
+            <div class="flex flex-column">
+                <p-divider align="left" type="dotted" class="m-0">
+                    <span class="font-14 text-color-secondary">Sender Details</span>
+                </p-divider>
+
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Sender Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Bank Name :</label>
+                        <label class="font-regular mr-1">Bank of Central Asia</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">Mr. Smith Individual</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 612363</label>
+                    </div>
+                </div>
+
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Recipient's Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-3">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Name :</label>
+                        <label class="font-regular mr-1">John and Barnes</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Number :</label>
+                        <label class="font-regular mr-1">FI - TA - 512611</label>
+                    </div>
+                </div>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Account Balance :</label>
+                        <label class="font-regular mr-1">{{cashBalanceTotal | currency: 'USD'}}</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Routing Number :</label>
+                        <label class="font-regular mr-1">12461-141-13</label>
+                    </div>
+                </div>
+
+                <p-divider align="left" type="dotted">
+                    <span class="font-14 text-color-secondary">Transaction Details</span>
+                </p-divider>
+                <div class="flex align-items-center justify-content-left gap-2 mb-5">
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Transaction Type :</label>
+                        <label class="font-regular mr-1">Same Day</label>
+                    </div>
+                    <div class="flex-1 flex-grow align-items-center justify-content-left">
+                        <label class="form-label">Transaction Amount :</label>
+                        <label class="font-regular mr-1">$1,25,00.00</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="flex align-items-center justify-content-center gap-3">
+                <p-button label="Back" severity="secondary" [outlined]="true" (click)="modalActiveIndex = 0" />
+                <p-button label="Confirm" (click)="modalActiveIndex = 2" />
+            </div>
+
+        </p-tabPanel>
+
+        <p-tabPanel header="Transaction Status">
+            <div class="w-100 text-center">
+                <div role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="--value: 95">
+                </div>
+                <p class="my-3 ">Transaction is under process.</p>
+                <p-button label="Close" (click)="showAddCashModal = false" />
+            </div>
+        </p-tabPanel>
+
+
+        <ng-template pTemplate="footer" class="py-2">
+            <p-button label="Back" severity="secondary" [outlined]="true" (click)="modalActiveIndex = 1" />
+            <p-button label="Next" (click)="modalActiveIndex = 2" />
+        </ng-template>
+
+
+    </p-tabView>
+</p-dialog>
+
+
+
+
+ <!-- Search Advisor -->
+ <p-dialog  [(visible)]="showExistingAdvisorList" [modal]="true" [styleClass]="'search-client'"
+ [breakpoints]="{ '920px': '100%' }" [style]="{ width: '920px' }" [draggable]="false"
+ [resizable]="false">
+ 
+    <ng-template pTemplate="header">
+        <div class="flex-grow-1 flex align-items-center justify-content-start gap-2">
+            <span class="font-medium white-space-nowrap m-0 font-16 font-semibold">
+                Find Existing Advisor
+            </span>
+            <div class="flex-grow-1 flex justify-content-end mr-2">
+                <p-iconField class="search-wrapper" iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-search" style="font-size: 0.5rem" />
+                    <input type="text" pInputText placeholder="Search" #searchTable
+                        (input)="ClientListTable.filterGlobal(searchTable.value,'contains')" />
+                </p-iconField>
+                <!-- <p-button icon="pi pi-user-plus" class="ml-1" tooltipPosition="top" pTooltip="Add Client" (onClick)="showAddClientSection()"/>  -->
+            </div>
+        </div>
+    </ng-template>
+
+
+    <p-tabView styleClass="tabview-custom" [(activeIndex)]="existingModal">
+        <!-- Find Existing Advisor Start Here -->
+        <p-tabPanel header="Find Existing Client">
+            <div class="card w-full">
+                <div class="flex flex-column justify-content-center">
+                    <div class="custom-table float-left w-full mb-3">
+                        <p-table [value]="clientList" [columns]="advisorListColumns" #ClientListTable [paginator]="false" 
+                        styleClass="scrollable-custom-table" [scrollable]="true" scrollHeight="calc(100vh - 270px)"
+                            [globalFilterFields]="['name', 'clienttype', 'primaryemail', 'primaryphone']">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <ng-container *ngFor="let column of columns">
+                                        <th [pSortableColumn]="column?.field" [pTooltip]="column?.tooltip" tooltipPosition="bottom">
+                                            <p-columnFilter type="text" [field]="column?.field" display="menu" [showAddButton]="false"
+                                                [showOperator]="false" />
+                                                {{column.header}}
+                                            <p-sortIcon [field]="column?.field" />
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-liquidity let-columns="columns">
+                                <tr>
+                                    <td>
+                                        <input type="radio"/>
+                                    </td>
+                                    <ng-container *ngFor="let column of columns">
+                                        <td *ngIf="column.field === 'name'" style="min-width: 210px;">{{ liquidity.name }}</td>
+                                        <td *ngIf="column.field === 'clienttype'" style="min-width: 120px;">
+                                            {{ liquidity.clienttype }}
+                                        </td>
+                                        <td *ngIf="column.field === 'primaryemail'">
+                                            {{ liquidity.primaryemail }}
+                                        </td>
+                                        <td *ngIf="column.field === 'primaryphone'" style="min-width: 180px;">
+                                            {{ liquidity.primaryphone }}
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <br/>
+                    <div class="flex justify-content-center gap-3">
+                        <p-button label="Cancel" severity="secondary" [outlined]="true" (onClick)="showExistingAdvisorList = false" />
+                        <p-button label="Select" (onClick)="selectAdvisor()"/>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
+
+</p-dialog>
